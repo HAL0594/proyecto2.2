@@ -119,7 +119,7 @@ function enviarEmail($email, $nombre, $asunto, $cuerpo){
     $mail->SMTPAuth = true;
     $mail->SMTPSecure = 'tls'; //tipo de seguridad
     $mail->Host = 'smtp.gmail.com'; //dominio
-    $mail->Port = 587; //puertoModificar
+    $mail->Port = 587; //puerto
     
     $mail->Username = 'mibanca0594@gmail.com'; //Correo de donde enviaremos los correos
     $mail->Password = 'password123()'; // Password de la cuenta de envío

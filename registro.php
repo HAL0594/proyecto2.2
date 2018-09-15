@@ -17,7 +17,7 @@
 		$telefono = $mysqli-> real_escape_string($_POST['telefono']);
 		$activo = 0;
 		$tipo_usuario = 2;
-		$secret = '6Lc8yW8UAAAAADott2MluONV40dIaT5wIfLXwpbb';//clave secreta de recapcha
+		$secret = '6Lc8yW8UAAAAADott2MluONV40dIaT5wIfLXwpbb';
 		
 		if(!$captcha){
 			$errors[] = "Por favor verifica el captcha";

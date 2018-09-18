@@ -178,4 +178,90 @@ function activarUsuario($id)
     $stmt->close();
     return $result;
 }
+
+function isNullLogin($usuario, $password){
+    if(strlen(trim($usuario)) < 1 || strlen(trim($password)) < 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+   }
+
+   function isActivo($usuario)
+   {
+       global $mysqli;
+       
+       $stmt = $mysqli->prepare("SELECT activacion FROM usuarios WHERE usuario = ? || correo = ? LIMIT 1");
+       $stmt->bind_param('ss', $usuario, $usuario);
+       $stmt->execute();
+       $stmt->bind_result($activacion);
+       $stmt->fetch();
+       
+       if ($activacion == 1)
+       {
+           return true;
+       }
+       else
+       {
+           return false;	
+       }
+   }	
+
+   function lastSession($id)
+	{
+		global $mysqli;
+		
+		$stmt = $mysqli->prepare("UPDATE usuarios SET last_session=NOW(), password_request=1 WHERE id = ?");
+		$stmt->bind_param('s', $id);
+		$stmt->execute();
+		$stmt->close();
+	}
+
+   function login( $usuario, $password)
+   {
+       global $mysqli;
+       
+       $stmt = $mysqli->prepare("SELECT id, id_tipo, password FROM usuarios WHERE usuario = ? || correo = ? LIMIT 1");
+       $stmt->bind_param("ss", $usuario, $usuario);
+       $stmt->execute();
+       $stmt->store_result();
+       $rows = $stmt->num_rows;
+       
+       if($rows > 0) {
+           
+           if(isActivo($usuario)){
+               
+               $stmt->bind_result($id, $id_tipo, $passwd);
+               $stmt->fetch();
+               
+               $validaPassw = password_verify($password, $passwd);
+               
+               if($validaPassw){
+                   
+                   lastSession($id);
+                   $_SESSION['id_usuario'] = $id;
+                   $_SESSION['tipo_usuario'] = $id_tipo;
+                   
+                   header("location: cliente.php");
+ 
+                   } else 
+                   {
+                   
+                   $errors = "La contrase&ntilde;a es incorrecta";
+                   }
+                  } else 
+                  {
+                 
+               $errors = 'El usuario no esta activo';
+           }
+           } else {
+               
+           $errors = "El nombre de usuario o correo electr&oacute;nico no existe";
+       }
+       return $errors;
+   }
+
     ?>

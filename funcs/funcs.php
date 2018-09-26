@@ -96,12 +96,12 @@ function resultBlock($errors){
     }
 }
 
-function registraUsuario($usuario,$pass_hash,$nombre,$email,$activo,$token,$tipo_usuario,$telefono){
+function registraUsuario($usuario,$pass_hash,$nombre,$email,$activo,$token,$tipo_usuario,$telefono,$no_cuenta){
 		
     global $mysqli;
     
-    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, password, nombre, correo, activacion, token, id_tipo, telefono) VALUES(?,?,?,?,?,?,?,?,?)");
-    $stmt->bind_param('ssssisii',$usuario,$pass_hash,$nombre,$email,$activo,$token,$tipo_usuario,$telefono);
+    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, password, nombre, correo, activacion, token, id_tipo, telefono, no_cuenta) VALUES(?,?,?,?,?,?,?,?,?)");
+    $stmt->bind_param('ssssisiii',$usuario,$pass_hash,$nombre,$email,$activo,$token,$tipo_usuario,$telefono,$no_cuenta);
 
     if ($stmt->execute()){
         return $mysqli->insert_id;

@@ -5,6 +5,7 @@ USE login;
 CREATE TABLE IF NOT EXISTS `terceros` (
   `id_tercero` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `no_cuenta` int(11) NOT NULL,
   `nombre_tercero` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `last_session` datetime DEFAULT NULL,
   `activacion` int(11) NOT NULL DEFAULT '0',
   `telefono` int(11) NOT NULL DEFAULT '0',
+  `no_cuenta` int(11) NOT NULL DEFAULT '0',
   `token` varchar(40) NOT NULL,
   `password_request` int(11) DEFAULT '0',
   `id_tipo` int(11) NOT NULL,

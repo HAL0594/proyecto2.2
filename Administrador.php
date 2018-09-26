@@ -1,20 +1,20 @@
 <?php
 
 
-	session_start();
-	require 'funcs/conexion.php';
-	include 'funcs/funcs.php';
-	
-	if(!isset($_SESSION["id_usuario"])){ //Si no ha iniciado sesión redirecciona a index.php
-		header("Location: index.php");
-	}
-	
-	$idUsuario = $_SESSION['id_usuario'];
-	
-	$sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'";
-	$result = $mysqli->query($sql);
-	
-	$row = $result->fetch_assoc();
+session_start();
+require 'funcs/conexion.php';
+include 'funcs/funcs.php';
+
+if (!isset($_SESSION["id_usuario"])) { //Si no ha iniciado sesión redirecciona a index.php
+	header("Location: index.php");
+}
+
+$idUsuario = $_SESSION['id_usuario'];
+
+$sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'";
+$result = $mysqli->query($sql);
+
+$row = $result->fetch_assoc();
 ?>
 
 <html>
@@ -61,20 +61,21 @@
 
 				<div id='navbar' class='navbar-collapse collapse '>
 					<ul class='nav nav1 navbar-nav '>
-						<li> <a href='cliente.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
+						<li> <a href='Administrador.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
 					</ul>
-					<?php if($_SESSION['tipo_usuario']==1) { ?>
+					<?php if ($_SESSION['tipo_usuario'] == 1) { ?>
 					<ul class='nav nav1 navbar-nav'>
-						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Administrar Usuarios</a></li>
+						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Panel de Administrar</a></li>
 					</ul>
-					<?php } ?>
+					<?php 
+			} ?>
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a href='logout.php'> <i class='glyphicon glyphicon-off'></i> Cerrar Sesi&oacute;n</a></li>
 					</ul>
 
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a> <i class='glyphicon glyphicon-user'></i>
-								<?php echo ''.utf8_decode($row['nombre']); ?></a></li>
+								<?php echo '' . utf8_decode($row['nombre']); ?></a></li>
 					</ul>
 				</div>
 			</div>
@@ -86,9 +87,8 @@
 
 
   <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li class="active"><a data-toggle="tab" href="#menu1">Agregar Cuentas de Terceros</a></li>
-    <li><a data-toggle="tab" href="#menu2">Transferencias</a></li>
-    <li><a data-toggle="tab" href="#menu3">Estado De Cuenta</a></li>
+    <li class="active"><a data-toggle="tab" href="#menu1">Agregar Cajeros</a></li>
+    <li><a data-toggle="tab" href="#menu2">Lista de Cajeros</a></li>
   </ul>
 
   <div class="tab-content">
@@ -100,11 +100,7 @@
       <h3>Transferencias</h3>
       <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
     </div>
-    <div id="menu3" class="tab-pane fade">
-      <h3>Estado De Cuenta</h3>
-      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    </div>
-  </div>
+	</div>
 
 
 			

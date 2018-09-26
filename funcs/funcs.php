@@ -37,7 +37,7 @@ function usuarioExiste($usuario)
 {
     global $mysqli;
 
-    $stmt = $mysqli->prepare("SELECT id FROM usuarios WHERE usuario = ? LIMIT 1");
+    $stmt = $mysqli->prepare("SELECT id_usuario FROM usuarios WHERE usuario = ? LIMIT 1");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
     $stmt->store_result();
@@ -55,7 +55,7 @@ function emailExiste($email)
 {
     global $mysqli;
 
-    $stmt = $mysqli->prepare("SELECT id FROM usuarios WHERE correo = ? LIMIT 1");
+    $stmt = $mysqli->prepare("SELECT id_usuario FROM usuarios WHERE correo = ? LIMIT 1");
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $stmt->store_result();
@@ -142,7 +142,7 @@ function validaIdToken($id, $token){
     global $mysqli;
    
     
-    $stmt = $mysqli->prepare("SELECT activacion FROM usuarios WHERE id = ? AND token = ? LIMIT 1");
+    $stmt = $mysqli->prepare("SELECT activacion FROM usuarios WHERE id_usuario = ? AND token = ? LIMIT 1");
     $stmt->bind_param("is", $id, $token);
     $stmt->execute();
     $stmt->store_result();
@@ -172,7 +172,7 @@ function activarUsuario($id)
     global $mysqli;
 
     $act = 1;
-    $stmt = $mysqli->prepare("UPDATE usuarios SET activacion = ? WHERE id = ?");
+    $stmt = $mysqli->prepare("UPDATE usuarios SET activacion = ? WHERE id_usuario = ?");
     $stmt->bind_param('is', $act, $id);
     $result = $stmt->execute();
     $stmt->close();
@@ -214,7 +214,7 @@ function isNullLogin($usuario, $password){
 	{
 		global $mysqli;
 		
-		$stmt = $mysqli->prepare("UPDATE usuarios SET last_session=NOW(), password_request=1 WHERE id = ?");
+		$stmt = $mysqli->prepare("UPDATE usuarios SET last_session=NOW(), password_request=1 WHERE id_usuario = ?");
 		$stmt->bind_param('s', $id);
 		$stmt->execute();
 		$stmt->close();
@@ -224,7 +224,7 @@ function isNullLogin($usuario, $password){
    {
        global $mysqli;
        
-       $stmt = $mysqli->prepare("SELECT id, id_tipo, password FROM usuarios WHERE usuario = ? || correo = ? LIMIT 1");
+       $stmt = $mysqli->prepare("SELECT id_usuario, id_tipo, password FROM usuarios WHERE usuario = ? || correo = ? LIMIT 1");
        $stmt->bind_param("ss", $usuario, $usuario);
        $stmt->execute();
        $stmt->store_result();

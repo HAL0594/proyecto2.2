@@ -4,7 +4,7 @@ require 'funcs/conexion.php';
 include 'funcs/funcs.php';
 
 if (!isset($_SESSION["id_usuario"])) { //Si no ha iniciado sesión redirecciona a index.php
-	header("Location: index.php");
+    header("Location: index.php");
 }
 
 $idUsuario = $_SESSION['id_usuario'];
@@ -14,24 +14,35 @@ $result = $mysqli->query($sql);
 
 $row = $result->fetch_assoc();
 
-if(isset($_POST['Enviar'])) {	
+if (isset($_POST['Enviar'])) {
 
-$nombre = $_POST['nombre'];
-$usuario = $_POST['usuario'];
-$email = $$_POST['email'];
-$telefono = $_POST['telefono'];
-$password = $_POST['password'];
-$con_password = $_POST['con_password'];
+    $nombre = $_POST['nombre'];
+    $usuario = $_POST['usuario'];
+    $email = $_POST['email'];
+    $telefono = $_POST['telefono'];
+    $password = $_POST['password'];
+    $con_password = $_POST['con_password'];
+    $token = generateToken();
 
-if ($password == $con_password) {
-    
-    $query = "INSERT INTO `usuarios`(`usuario`, `password`, `nombre`, `correo`, `last_session`, `activacion`, `telefono`, 
-                                     `no_cuenta`, `token`, `password_request`, `id_tipo`, `saldo_cuenta`) 
-                    VALUES ($usuario,$password,$nombre,$email,null,1,$telefono,null,generateToken(),[value-11],[value-12],[value-13]);";
-    echo "aqui va el insert";
-}else{
-    echo "El Password no coincide";
-}
+    if ($password == $con_password) {
+
+        $query = "INSERT INTO usuarios(usuario, password, nombre, correo, last_session, activacion, telefono, 
+                                     no_cuenta, token, password_request, id_tipo, saldo_cuenta) 
+                    VALUES ($usuario,$password,$nombre,$email,null,1,$telefono,null,$token,null,2,null);";
+
+        if ($mysqli->query($query) === true) {
+            $mysqli->close();
+            echo "Cajero ingresado correctamente";
+            //header("Location: administrador.php");
+
+        } else {
+            var_dump($mysqli);
+        }
+
+
+    } else {
+        echo "El Password no coincide";
+    }
 
 
 

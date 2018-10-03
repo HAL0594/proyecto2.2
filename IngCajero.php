@@ -1,4 +1,5 @@
 <?php
+$errors = array();
 session_start();
 require 'funcs/conexion.php';
 include 'funcs/funcs.php';
@@ -27,11 +28,19 @@ if (isset($_POST['Enviar'])) {
 
     if ($password == $con_password) {
 
-       registraCajero($usuario,$password,$nombre,$email,1,null,3,$telefono,$no_cuenta);
-       header("Location: Administrador.php"); 
+        echo "entramos a la funcion";
+        echo "$usuario"." $password"."$nombre"."$email"."$telefono"."$no_cuenta";
+ 
+
+
+       if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
+        header("Location: Administrador.php"); 
+       }
+       //header("Location: Administrador.php"); 
 
     } else {
-        echo "El Password no coincide";
+        $errors[] = "Error El Password no coincide";
+        //echo "El Password no coincide";
     }
 
 
@@ -39,3 +48,5 @@ if (isset($_POST['Enviar'])) {
 
 }
 ?>
+
+

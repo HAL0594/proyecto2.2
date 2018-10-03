@@ -1,4 +1,5 @@
 <?php
+$errors = array();
 session_start();
 require 'funcs/conexion.php';
 include 'funcs/funcs.php';
@@ -13,6 +14,44 @@ $sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'"
 $result = $mysqli->query($sql);
 
 $row = $result->fetch_assoc();
+
+if (isset($_POST['Enviar'])) {
+
+    $nombre = $_POST['nombre'];
+    $usuario = $_POST['usuario'];
+    $email = $_POST['email'];
+    $telefono = $_POST['telefono'];
+    $password = $_POST['password'];
+    $con_password = $_POST['con_password'];
+    $no_cuenta = $_POST['Cuenta'];
+    
+
+    if ($password == $con_password) {
+
+        echo "entramos a la funcion";
+        echo "$usuario"." $password"."$nombre"."$email"."$telefono"."$no_cuenta";
+ 
+
+
+       if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
+        header("Location: Administrador.php"); 
+       }
+       //header("Location: Administrador.php"); 
+
+    } else {
+        $errors[] = "Error El Password no coincide";
+        //echo "El Password no coincide";
+    }
+
+}
+
+
+
+
+
+
+
+
 ?>
 
 <html>
@@ -31,13 +70,7 @@ $row = $result->fetch_assoc();
 			padding-top: 20px;
 			}
 
-.bordered-tab-contents , .tab-content  {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-    border-radius: 0px 0px 5px 5px;
-    padding: 10px;
-}
+
 
 	</style>
 </head>
@@ -66,7 +99,7 @@ $row = $result->fetch_assoc();
 						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Panel de Administrar</a></li>
 					</ul>
 					<?php 
-					} ?>
+			} ?>
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a href='logout.php'> <i class='glyphicon glyphicon-off'></i> Cerrar Sesi&oacute;n</a></li>
 					</ul>
@@ -87,18 +120,13 @@ $row = $result->fetch_assoc();
     <li><a data-toggle="tab" href="#menu2">Lista de Cajeros</a></li>
   </ul>
 
-  <div class="tab-content">
-    <div id="menu1" class="tab-pane fade in active">
-      <h3>Ingrese la Informacion</h3>
-      <div class="panel-body" >
-						<form id="signupform" class="form-horizontal" role="form" action="IngCajero.php" method="POST" autocomplete="off">
-							
-							<div id="signupalert" style="display:none" class="alert alert-danger">
-								<p>Error:</p>
-								<span></span>
-							</div>
-							
-							<div class="form-group">
+<div class="tab-content">
+
+<div id="menu1" class="tab-pane fade in active">
+	<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+		<div class="form-group tab-pane col-sm-6">
+		
+		                    <div class="form-group">
 								<label for="nombre" class="col-md-3 control-label">Nombre:</label>
 								<div class="col-md-9">
 									<input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php if (isset($nombre)) echo $nombre; ?>" required >
@@ -115,7 +143,7 @@ $row = $result->fetch_assoc();
 							<div class="form-group">
 								<label for="Cuenta" class="col-md-3 control-label">Cuenta</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="Cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($Cuenta)) echo $Cuenta; ?>" required>
+									<input type="text" class="form-control" name="Cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($no_cuenta)) echo $no_cuenta; ?>" required>
 								</div>
 							</div>
 
@@ -123,7 +151,7 @@ $row = $result->fetch_assoc();
 							<div class="form-group">
 								<label for="email" class="col-md-3 control-label">Email</label>
 								<div class="col-md-9">
-									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if(isset($email)) echo $email; ?>" required>
+									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if (isset($email)) echo $email; ?>" required>
 								</div>
 							</div>
 							
@@ -158,20 +186,53 @@ $row = $result->fetch_assoc();
 									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar"><i class="icon-hand-right"></i>Registrar</button> 
 								</div>
 							</div>
-						</form>
-	</div>
-	
-    <div id="menu2" class="tab-pane fade">
-      <h3>Transferencias</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-	</div>
-	
-	</div>
+							<div class="form-group"><?php echo resultBlock($errors); ?></div>
+
+		</div>
+	</form>
+		
+</div>
+
+<div id="menu2" class="tab-pane fade">
+	<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
+		<div class="form-group tab-pane col-sm-6">
+			<h3>Contactos</h3>
+			<div class="box tab-pane">
+				<select name="estado">
+					<?php 
+			 if ($resultC->num_rows > 0)
+			 {
+
+			 while ($row = $resultC->fetch_array(MYSQLI_ASSOC)) 
+			 {
+			 echo " <option value='".$row['no_cuenta']."'>".$row['no_cuenta']."</option>"; 
+			 }
+			 }
+			 else
+			 {
+			 echo " <option value='Sin Contactos'>Sin Contactos</option>"; 
+			 }
+			 ?>
+				</select>
+			</div>
+		</div>
+		<div class="form-group tab-pane col-sm-6">
+			<div class="form-group">
+				<label for="no_cuenta">Catidad del deposito:</label>
+				<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-default">Confirmar</button>
+			</div>
+		</div>
+	</form>
+</div>
 
 
-			
-	</div>
-	</div>
+</div>
+</div>
+
+</div>
 
 </body>
 

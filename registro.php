@@ -143,7 +143,7 @@
 							<div class="form-group">
 								<label for="no_cuenta" class="col-md-3 control-label">No. Cuenta</label>
 								<div class="col-md-9">
-									<input type="password" class="form-control" name="no_cuenta" placeholder="Tu numero de cuenta" required>
+									<input type="text" class="form-control" name="no_cuenta" placeholder="Tu numero de cuenta" required>
 								</div>
 							</div>
 

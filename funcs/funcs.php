@@ -332,6 +332,8 @@ function registraCajero($usuario, $pass_hash, $nombre, $email, $activo, $token, 
 
     global $mysqli;
 
+    
+
     $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, password, nombre, correo, activacion, telefono, 
     no_cuenta, token, id_tipo) VALUES(?,?,?,?,?,?,?,?,?)");
     $stmt->bind_param('ssssiiisi', $usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta);

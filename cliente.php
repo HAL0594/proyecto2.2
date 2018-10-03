@@ -119,15 +119,15 @@ if ($YaExiste->num_rows > 0)
 .box select{
 	background: #CCCCCC;
 	color: #000;
-	padding; 10px;
 	width: 250px;
 	height: 40px;
 	}
 
 	.form-group{
-		
 		padding-top: 5px;
+		
 	}
+
 	</style>
 </head>
 

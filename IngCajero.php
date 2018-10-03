@@ -22,23 +22,13 @@ if (isset($_POST['Enviar'])) {
     $telefono = $_POST['telefono'];
     $password = $_POST['password'];
     $con_password = $_POST['con_password'];
-    $token = generateToken();
+    $no_cuenta = $_POST['Cuenta'];
+    
 
     if ($password == $con_password) {
 
-        $query = "INSERT INTO usuarios(usuario, password, nombre, correo, last_session, activacion, telefono, 
-                                     no_cuenta, token, password_request, id_tipo, saldo_cuenta) 
-                    VALUES ($usuario,$password,$nombre,$email,null,1,$telefono,null,$token,null,2,null);";
-
-        if ($mysqli->query($query) === true) {
-            $mysqli->close();
-            echo "Cajero ingresado correctamente";
-            //header("Location: administrador.php");
-
-        } else {
-            var_dump($mysqli);
-        }
-
+       registraCajero($usuario,$password,$nombre,$email,1,null,3,$telefono,$no_cuenta);
+       header("Location: Administrador.php"); 
 
     } else {
         echo "El Password no coincide";
@@ -46,13 +36,6 @@ if (isset($_POST['Enviar'])) {
 
 
 
-// if ($mysqli->query($query) === true) {
-//     $mysqli->close();
-//     header("Location: index.php");
-    
-// }else {
-//     var_dump($mysqli);
-// }
 
 }
 ?>

@@ -325,4 +325,21 @@ function activarTercero($token)
     $stmt->close();
     return $result;
 }
+
+
+function registraCajero($usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta)
+{
+
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, password, nombre, correo, activacion, telefono, 
+    no_cuenta, token, id_tipo) VALUES(?,?,?,?,?,?,?,?,?)");
+    $stmt->bind_param('ssssiiisi', $usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta);
+
+    if ($stmt->execute()) {
+        return $mysqli->insert_id;
+    } else {
+        return 0;
+    }
+}
 ?>

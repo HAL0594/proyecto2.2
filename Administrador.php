@@ -113,6 +113,14 @@ $row = $result->fetch_assoc();
 							</div>
 
 							<div class="form-group">
+								<label for="Cuenta" class="col-md-3 control-label">Cuenta</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="Cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($Cuenta)) echo $Cuenta; ?>" required>
+								</div>
+							</div>
+
+
+							<div class="form-group">
 								<label for="email" class="col-md-3 control-label">Email</label>
 								<div class="col-md-9">
 									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if(isset($email)) echo $email; ?>" required>

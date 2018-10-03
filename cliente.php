@@ -1,5 +1,6 @@
 <?php
 
+$errors = array();
 
 	session_start();
 	require 'funcs/conexion.php';
@@ -9,12 +10,94 @@
 		header("Location: index.php");
 	}
 	
+	
+    $permitido = 0;
 	$idUsuario = $_SESSION['id_usuario'];
 	
-	$sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'";
+	$sql = "SELECT id_usuario, nombre, no_cuenta FROM usuarios WHERE id_usuario = '$idUsuario'";
 	$result = $mysqli->query($sql);
-	
 	$row = $result->fetch_assoc();
+	$minombre = $row['nombre'];
+	$micuenta = $row['no_cuenta'];
+	$miid = $row['id_usuario'];
+
+	$sqlCuenta = "SELECT saldo, no_cuenta FROM cuentas WHERE no_cuenta = '$micuenta'";
+	$ResCeunta = $mysqli->query($sqlCuenta);
+	$Dcuenta = $ResCeunta->fetch_assoc();
+	$misaldo = $Dcuenta['saldo'];
+
+
+
+$SQLListaContactos="SELECT no_cuenta FROM terceros WHERE id_usuario = '$idUsuario' AND permitido = 1";
+$resultC = $mysqli->query($SQLListaContactos);
+
+
+
+
+	
+
+	if(!empty($_POST))
+	{
+
+	$no_cuentaP = $_POST['no_cuenta'];
+
+	if($micuenta != $no_cuentaP){
+
+$SQLYaExiste="SELECT no_cuenta  FROM terceros WHERE no_cuenta = '$no_cuentaP' AND permitido = 1 AND id_usuario = '$idUsuario'";
+$YaExiste = $mysqli->query($SQLYaExiste);
+if ($YaExiste->num_rows > 0)
+	{
+
+		$errors[] = "Esta cuenta ya fue agregada";
+	} else {
+		
+
+
+		
+		$SQLExisteCuenta="SELECT no_cuenta FROM usuarios Where no_cuenta='$no_cuentaP'";
+		$ExisteCuenta=$mysqli->query($SQLExisteCuenta);
+		if ($ExisteCuenta->num_rows > 0)
+		{
+		
+			$sqlTercero = "SELECT id_usuario, nombre, correo, no_cuenta FROM usuarios WHERE no_cuenta = '$no_cuentaP'";
+			$resultTercero = $mysqli->query($sqlTercero);
+			$rowTercero = $resultTercero->fetch_assoc();
+			$emailTercero = $rowTercero['correo'];
+			$nombreTercero = $rowTercero['nombre'];
+			$cuentaTercero = $rowTercero['no_cuenta'];
+			
+			$token = generateToken();
+			$registro = registraTercero($miid, $cuentaTercero, $permitido, $token);			
+							if($registro > 0)
+							{				
+								$url = 'http://'.$_SERVER["SERVER_NAME"].'/proyecto2.2/add_terceros.php?val='.$token;
+								
+								$asunto = 'Uso de cuenta Para Transaccion';
+								$cuerpo = "Estimado Usuario: <br /><br />El Usuario $minombre quiere usar tu cuenta para realizar transacciones  si quieres aceptar has click: <a href='$url'>Dar Permiso</a>";
+								
+								if(enviarEmail($emailTercero, $minombre, $asunto, $cuerpo)){
+									
+									$errors[] = "para agregar el Contacto para transferencias es necesario que este verifique el uso de su cuenta para ello se le a enviado un correo Para dar permisos";
+									} else {
+									$erros[] = "Error al enviar Email";
+								}
+								
+								} else {
+								$errors[] = "Error al agregar Cuenta";
+							}
+	
+		} else {
+			$errors[] = "No existe ninguna cuenta $no_cuentaP";
+		}
+
+	}
+
+
+
+
+
+				}else{ $errors[] = "No puedes agregar tu propia cuenta como un Contacto"; }
+			}
 ?>
 
 <html>
@@ -29,18 +112,22 @@
 
 	<style>
 
-	body {
-			padding-top: 20px;
-			}
-
-.bordered-tab-contents , .tab-content  {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-    border-radius: 0px 0px 5px 5px;
-    padding: 10px;
+		body {
+	padding-top: 20px;
 }
 
+.box select{
+	background: #CCCCCC;
+	color: #000;
+	padding; 10px;
+	width: 250px;
+	height: 40px;
+	}
+
+	.form-group{
+		
+		padding-top: 5px;
+	}
 	</style>
 </head>
 
@@ -63,11 +150,7 @@
 					<ul class='nav nav1 navbar-nav '>
 						<li> <a href='cliente.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
 					</ul>
-					<?php if($_SESSION['tipo_usuario']==1) { ?>
-					<ul class='nav nav1 navbar-nav'>
-						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Administrar Usuarios</a></li>
-					</ul>
-					<?php } ?>
+
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a href='logout.php'> <i class='glyphicon glyphicon-off'></i> Cerrar Sesi&oacute;n</a></li>
 					</ul>
@@ -85,30 +168,104 @@
 
 
 
-  <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li class="active"><a data-toggle="tab" href="#menu1">Agregar Cuentas de Terceros</a></li>
-    <li><a data-toggle="tab" href="#menu2">Transferencias</a></li>
-    <li><a data-toggle="tab" href="#menu3">Estado De Cuenta</a></li>
-  </ul>
+			<ul class="nav nav-tabs nav-justified" role="tablist">
+				<li class="active"><a data-toggle="tab" href="#menu1">Estado De Cuenta </a></li>
+				<li><a data-toggle="tab" href="#menu2">Transferencias</a></li>
+				<li><a data-toggle="tab" href="#menu3">Agregar Cuentas de Terceros</a></li>
+			</ul>
 
-  <div class="tab-content">
-    <div id="menu1" class="tab-pane fade in active">
-      <h3>Agregar Cuentas de Terceros</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div id="menu2" class="tab-pane fade">
-      <h3>Transferencias</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-    </div>
-    <div id="menu3" class="tab-pane fade">
-      <h3>Estado De Cuenta</h3>
-      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    </div>
-  </div>
+			<div class="tab-content">
 
+				<div id="menu1" class="tab-pane fade in active">
+					<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
+						<div class="form-group tab-pane col-sm-6">
+							<h3>Estado De Cuenta</h3>
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Campo:</th>
+										<th>Mi informacion:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">Usuarios:</th>
+										<td>
+											<?php echo "$minombre" ?>
+										</td>
+									</tr>
+									<tr>
+										<td scope="row">Cuenta:</td>
+										<td>
+											<?php echo "$micuenta" ?>
+										</td>
+									</tr>
+									<tr>
+										<td scope="row">Saldo:</td>
+										<td>
+											<?php echo "$misaldo" ?>
+										</td>
 
-			
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</form>
+				</div>
+
+				<div id="menu2" class="tab-pane fade">
+					<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
+						<div class="form-group tab-pane col-sm-6">
+							<h3>Contactos</h3>
+							<div class="box tab-pane">
+								<select name="estado">
+									<?php 
+		                     if ($resultC->num_rows > 0)
+		                     {
+		   
+			                 while ($row = $resultC->fetch_array(MYSQLI_ASSOC)) 
+			                 {
+				             echo " <option value='".$row['no_cuenta']."'>".$row['no_cuenta']."</option>"; 
+			                 }
+		                     }
+		                     else
+		                     {
+			                 echo " <option value='Sin Contactos'>Sin Contactos</option>"; 
+		                     }
+		                     ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group tab-pane col-sm-6">
+							<div class="form-group">
+								<label for="no_cuenta">Catidad del deposito:</label>
+								<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-default">Confirmar</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div id="menu3" class="tab-pane fade">
+
+					<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+						<div class="form-group">
+
+							<label for="no_cuenta">No. cuenta de Contacto</label>
+							<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-default">Confirmar</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
 		</div>
+		<?php echo resultBlock($errors); ?>
 	</div>
 
 </body>

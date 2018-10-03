@@ -175,7 +175,7 @@
 							
 							<div class="form-group">                             
 								<div class="col-md-offset-3 col-md-9">
-									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block"><i class="icon-hand-right"></i>Registrar</button> 
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block">Registrar</button> 
 								</div>
 							</div>
 						</form>

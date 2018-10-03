@@ -84,9 +84,10 @@ function hashPassword($password)
 
 function resultBlock($errors)
 {
+    $pagina_actual = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     if (count($errors) > 0) {
         echo "<div id='error' class='alert alert-danger' role='alert'>
-        <a href='#' onclick=\"showHide('error');\">[X]</a>
+        <a href='$pagina_actual' onclick=\"showHide('error');\">[X]</a>
         <ul>";
         foreach ($errors as $error) {
             echo "<li>" . $error . "</li>";
@@ -126,7 +127,7 @@ function enviarEmail($email, $nombre, $asunto, $cuerpo)
     $mail->Username = 'mibanca0594@gmail.com'; //Correo de donde enviaremos los correos
     $mail->Password = 'password123()'; // Password de la cuenta de envío
 
-    $mail->setFrom('mibanca0594@gmail.com', 'Emisor');
+    $mail->setFrom('mibanca0594@gmail.com', 'MiBanca');
     $mail->addAddress($email, $nombre);
 
     $mail->Subject = $asunto;
@@ -267,4 +268,61 @@ function login($usuario, $password)
     return $errors;
 }
 
+function registraTercero($usuario, $no_cuenta, $permitido, $token)
+{
+
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("INSERT INTO terceros (id_usuario, no_cuenta, permitido, token) VALUES(?,?,?,?)");
+    $stmt->bind_param('iiis', $usuario, $no_cuenta, $permitido, $token);
+
+    if ($stmt->execute()) {
+        return $mysqli->insert_id;
+    } else {
+        return 0;
+    }
+}
+
+
+function validaIdTokenTercero($token)
+{
+    global $mysqli;
+
+
+    $stmt = $mysqli->prepare("SELECT permitido FROM terceros WHERE token = ? LIMIT 1");
+    $stmt->bind_param("s", $token);
+    $stmt->execute();
+    $stmt->store_result();
+    $rows = $stmt->num_rows;
+
+    if ($rows > 0) {
+        $stmt->bind_result($activacion);
+        $stmt->fetch();
+
+        if ($activacion == 1) {
+            $msg = "La cuenta ya se agrego anteriormente.";
+        } else {
+            if (activarTercero($token)) {
+                $msg = 'Cuenta Agregada.';
+            } else {
+                $msg = 'Error al enlazar cuenta del Contacto';
+            }
+        }
+    } else {
+        $msg = 'No existe el registro para activar.';
+    }
+    return $msg;
+}
+
+function activarTercero($token)
+{
+    global $mysqli;
+
+    $act = 1;
+    $stmt = $mysqli->prepare("UPDATE terceros SET permitido = ? WHERE token = ?");
+    $stmt->bind_param('is', $act, $token);
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
+}
 ?>

@@ -28,8 +28,9 @@ if (isset($_POST['Enviar'])) {
 
     if ($password == $con_password) {
 
+		$pass_hash = hashPassword($password);
         
-       if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
+       if(registraCajero($usuario,$pass_hash,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
 			
 			unset($nombre);
 			unset($usuario);

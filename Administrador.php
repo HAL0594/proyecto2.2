@@ -23,7 +23,7 @@ if (isset($_POST['Enviar'])) {
     $telefono = $_POST['telefono'];
     $password = $_POST['password'];
     $con_password = $_POST['con_password'];
-    $no_cuenta = $_POST['Cuenta'];
+    $no_cuenta = $_POST['no_cuenta'];
     
 
     if ($password == $con_password) {
@@ -31,13 +31,13 @@ if (isset($_POST['Enviar'])) {
         
        if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
 			$errors[] = "Cajero ingresado con EXITO";
-			unset($_POST['nombre']);
-			unset($_POST['usuario']);
-			unset($_POST['email']);
-			unset($_POST['telefono']);
-			unset($_POST['password']);
-			unset($_POST['con_password']);
-			unset($_POST['Cuenta']);	
+			unset($nombre);
+			unset($usuario);
+			unset($email);
+			unset($telefono);
+			unset($password);
+			unset($con_password);
+			unset($no_cuenta);	
 			
        }
 
@@ -134,9 +134,9 @@ if (isset($_POST['Enviar'])) {
 							</div>
 
 							<div class="form-group">
-								<label for="Cuenta" class="col-md-3 control-label">Cuenta</label>
+								<label for="no_cuenta" class="col-md-3 control-label">Cuenta</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="Cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($no_cuenta)) echo $no_cuenta; ?>" required>
+									<input type="text" class="form-control" name="no_cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($no_cuenta)) echo $no_cuenta; ?>" required>
 								</div>
 							</div>
 

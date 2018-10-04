@@ -1,99 +1,92 @@
 
 <?php
-	require 'funcs/conexion.php';
-	include 'funcs/funcs.php';
- 
-	$errors = array();
-	
-	if(!empty($_POST))
-	{
-		$nombre = $mysqli->real_escape_string($_POST['nombre']);
-		$usuario = $mysqli->real_escape_string($_POST['usuario']);
-		$password = $mysqli->real_escape_string($_POST['password']);
-		$con_password = $mysqli->real_escape_string($_POST['con_password']);
-		$email = $mysqli->real_escape_string($_POST['email']);
-		$captcha = $mysqli->real_escape_string($_POST['g-recaptcha-response']);
-		$no_cuenta = $mysqli->real_escape_string($_POST['no_cuenta']);
-		$telefono = $mysqli-> real_escape_string($_POST['telefono']);
-		$PIN = $mysqli-> real_escape_string($_POST['PIN']);
-		$activo = 0;
-		$tipo_usuario = 2;
-		$secret = '6Lc8yW8UAAAAADott2MluONV40dIaT5wIfLXwpbb';
-		
-		if(!$captcha){
-			$errors[] = "Por favor verifica el captcha";
-		}
-        
+require 'funcs/conexion.php';
+include 'funcs/funcs.php';
 
-		if(isNULL($nombre, $usuario, $password, $con_password, $email))
-		{
-			$errors[] = "Debe llenar todos los campos";
-		}
-        
+$errors = array();
 
-		if(!isEmail($email))
-		{
-			$errors[] = "Dirección de correo inválida";
-		}
-		
-		if(!validaPassword($password, $con_password))
-		{
-			$errors[] = "Las contraseñas no coinciden";
-		}		
-		
-		if(usuarioExiste($usuario))
-		{
-			$errors[] = "El nombre de usuario $usuario ya existe";
-		}
-		
-		if(emailExiste($email))
-		{
-			$errors[] = "El correo electronico $email ya existe";
-		}
-		
-		if(count($errors) == 0)
-		{
-			
-			$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha");
-			
-			$arr = json_decode($response, TRUE);
-			
-			if($arr['success'])
-			{
-			$ValPinCuen	= ValidarCuenta($no_cuenta,$PIN);
-            if($ValPinCuen > 0)	{	
+if (!empty($_POST)) {
+	$nombre = $mysqli->real_escape_string($_POST['nombre']);
+	$usuario = $mysqli->real_escape_string($_POST['usuario']);
+	$password = $mysqli->real_escape_string($_POST['password']);
+	$con_password = $mysqli->real_escape_string($_POST['con_password']);
+	$email = $mysqli->real_escape_string($_POST['email']);
+	$captcha = $mysqli->real_escape_string($_POST['g-recaptcha-response']);
+	$no_cuenta = $mysqli->real_escape_string($_POST['no_cuenta']);
+	$telefono = $mysqli->real_escape_string($_POST['telefono']);
+	$PIN = $mysqli->real_escape_string($_POST['PIN']);
+	$activo = 0;
+	$tipo_usuario = 2;
+	$secret = '6Lc8yW8UAAAAADott2MluONV40dIaT5wIfLXwpbb';
+
+	if (!$captcha) {
+		$errors[] = "Por favor verifica el captcha";
+	}
+
+
+	if (isNULL($nombre, $usuario, $password, $con_password, $email)) {
+		$errors[] = "Debe llenar todos los campos";
+	}
+
+
+	if (!isEmail($email)) {
+		$errors[] = "Dirección de correo inválida";
+	}
+
+	if (!validaPassword($password, $con_password)) {
+		$errors[] = "Las contraseñas no coinciden";
+	}
+
+	if (usuarioExiste($usuario)) {
+		$errors[] = "El nombre de usuario $usuario ya existe";
+	}
+
+	if (emailExiste($email)) {
+		$errors[] = "El correo electronico $email ya existe";
+	}
+
+	if (count($errors) == 0) {
+
+		$response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$captcha");
+
+		$arr = json_decode($response, true);
+
+		if ($arr['success']) {
+
+			$ValPinCuen = ValidarCuenta($no_cuenta, $PIN);
+
+			if ($ValPinCuen > 0) {
 				$pass_hash = hashPassword($password);
 				$token = generateToken();
-				
-				$registro = registraUsuario($usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta);			
-				if($registro > 0)
-				{				
-					$url = 'http://'.$_SERVER["SERVER_NAME"].'/proyecto2.2/activar.php?id='.$registro.'&val='.$token;
-					
+
+				$registro = registraUsuario($usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta);
+				if ($registro > 0) {
+					$url = 'http://' . $_SERVER["SERVER_NAME"] . '/proyecto2.2/activar.php?id=' . $registro . '&val=' . $token;
+
 					$asunto = 'Activar Cuenta - Sistema de Usuarios';
 					$cuerpo = "Estimado $nombre: <br /><br />Para continuar con el proceso de registro, es indispensable de click en la siguiente liga <a href='$url'>Activar Cuenta</a>";
-					
-					if(enviarEmail($email, $nombre, $asunto, $cuerpo)){
-						
+
+					if (enviarEmail($email, $nombre, $asunto, $cuerpo)) {
+
 						echo "Para terminar el proceso de registro siga las instrucciones que le hemos enviado la direccion de correo electronico: $email";
 						echo "<br><a href='index.php' >Iniciar Sesion</a>";
 						exit;
-						} else {
+					} else {
 						$erros[] = "Error al enviar Email";
 					}
-					
-					} else {
+
+				} else {
 					$errors[] = "Error al Registrar";
 				}
-			}else {
-				
+			} else {
+
 				$errors[] = "La cuenta o el PIN son incorrectos";
 			}
-				} else {
-				$errors[] = 'Error al comprobar Captcha';
-			}
+		} else {
+			$errors[] = 'Error al comprobar Captcha';
 		}
 	}
+}
 ?>
 <html>
 	<head>
@@ -127,21 +120,21 @@
 							<div class="form-group">
 								<label for="nombre" class="col-md-3 control-label">Nombre:</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php if(isset($nombre)) echo $nombre; ?>" required >
+									<input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php if (isset($nombre)) echo $nombre; ?>" required >
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="usuario" class="col-md-3 control-label">Usuario</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="usuario" placeholder="Usuario" value="<?php if(isset($usuario)) echo $usuario; ?>" required>
+									<input type="text" class="form-control" name="usuario" placeholder="Usuario" value="<?php if (isset($usuario)) echo $usuario; ?>" required>
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="telefono" class="col-md-3 control-label">Telefono</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="telefono" placeholder="Telefono" value="<?php if(isset($telefono)) echo $telefono; ?>" required>
+									<input type="text" class="form-control" name="telefono" placeholder="Telefono" value="<?php if (isset($telefono)) echo $telefono; ?>" required>
 								</div>
 							</div>
 
@@ -176,7 +169,7 @@
 							<div class="form-group">
 								<label for="email" class="col-md-3 control-label">Email</label>
 								<div class="col-md-9">
-									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if(isset($email)) echo $email; ?>" required>
+									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if (isset($email)) echo $email; ?>" required>
 								</div>
 							</div>
 							

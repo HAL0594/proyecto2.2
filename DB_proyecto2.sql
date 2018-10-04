@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `cuentas` (
 CREATE TABLE IF NOT EXISTS `transacciones` (
   `id_Trans` INT AUTO_INCREMENT PRIMARY KEY,
   `descripcion` varchar(50),
-  `no_cuenta` int(11),
+  `no_cuenta_origen` int(11),
   `no_cuenta_destino` int(11),
   `cantidad` DOUBLE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

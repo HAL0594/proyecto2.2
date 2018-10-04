@@ -31,25 +31,20 @@ if (isset($_POST['Enviar'])) {
         
        if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
 			$errors[] = "Cajero ingresado con EXITO";
-					
+			unset($_POST['nombre']);
+			unset($_POST['usuario']);
+			unset($_POST['email']);
+			unset($_POST['telefono']);
+			unset($_POST['password']);
+			unset($_POST['con_password']);
+			unset($_POST['Cuenta']);	
 			
        }
-       
 
     } else {
         $errors[] = "Error El Password no coincide";
-        
     }
-
 }
-
-
-
-
-
-
-
-
 ?>
 
 <html>

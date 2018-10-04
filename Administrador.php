@@ -28,19 +28,17 @@ if (isset($_POST['Enviar'])) {
 
     if ($password == $con_password) {
 
-        echo "entramos a la funcion";
-        echo "$usuario"." $password"."$nombre"."$email"."$telefono"."$no_cuenta";
- 
-
-
+        
        if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
-        header("Location: Administrador.php"); 
+			$errors[] = "Cajero ingresado con EXITO";
+					
+			
        }
-       //header("Location: Administrador.php"); 
+       
 
     } else {
         $errors[] = "Error El Password no coincide";
-        //echo "El Password no coincide";
+        
     }
 
 }

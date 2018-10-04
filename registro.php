@@ -15,6 +15,7 @@
 		$captcha = $mysqli->real_escape_string($_POST['g-recaptcha-response']);
 		$no_cuenta = $mysqli->real_escape_string($_POST['no_cuenta']);
 		$telefono = $mysqli-> real_escape_string($_POST['telefono']);
+		$PIN = $mysqli-> real_escape_string($_POST['PIN']);
 		$activo = 0;
 		$tipo_usuario = 2;
 		$secret = '6Lc8yW8UAAAAADott2MluONV40dIaT5wIfLXwpbb';
@@ -59,7 +60,8 @@
 			
 			if($arr['success'])
 			{
-				
+			$ValPinCuen	= ValidarCuenta($no_cuenta,$PIN);
+            if($ValPinCuen > 0)	{	
 				$pass_hash = hashPassword($password);
 				$token = generateToken();
 				
@@ -83,7 +85,10 @@
 					} else {
 					$errors[] = "Error al Registrar";
 				}
+			}else {
 				
+				$errors[] = "La cuenta o el PIN son incorrectos";
+			}
 				} else {
 				$errors[] = 'Error al comprobar Captcha';
 			}
@@ -144,6 +149,13 @@
 								<label for="no_cuenta" class="col-md-3 control-label">No. Cuenta</label>
 								<div class="col-md-9">
 									<input type="text" class="form-control" name="no_cuenta" placeholder="Tu numero de cuenta" required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="PIN" class="col-md-3 control-label">PIN: </label>
+								<div class="col-md-9">
+									<input type="password" class="form-control" name="PIN" placeholder="Tu Pin De Cuenta" required>
 								</div>
 							</div>
 

@@ -97,6 +97,25 @@ function resultBlock($errors)
     }
 }
 
+function ValidarCuenta($no_cuenta, $PIN)
+{
+
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("SELECT no_cuenta, PIN FROM cuentas WHERE no_cuenta = ? AND PIN = ? LIMIT 1");
+    $stmt->bind_param("ii", $no_cuenta, $PIN);
+    $stmt->execute();
+    $stmt->store_result();
+    $rows = $stmt->num_rows;
+
+    if ($rows > 0) {
+        return 1;
+    } else {
+        return 0;
+        $errors = "La cuenta o el PIN son incorrectos";
+    }
+}
+
 function registraUsuario($usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta)
 {
 

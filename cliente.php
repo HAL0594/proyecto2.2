@@ -10,7 +10,8 @@ $errors = array();
 		header("Location: index.php");
 	}
 	
-	
+//*********************************** Obteniendo Datos de Session ********************************************
+
     $permitido = 0;
 	$idUsuario = $_SESSION['id_usuario'];
 	
@@ -26,17 +27,14 @@ $errors = array();
 	$Dcuenta = $ResCeunta->fetch_assoc();
 	$misaldo = $Dcuenta['saldo'];
 
-
+//*********************************** Query para lista de terceros ********************************************
 
 $SQLListaContactos="SELECT no_cuenta FROM terceros WHERE id_usuario = '$idUsuario' AND permitido = 1";
 $resultC = $mysqli->query($SQLListaContactos);
 
+//*********************************** Comienza El Codigo de Transacciones ********************************************
 
-
-
-	
-
-	if(!empty($_POST))
+if (isset($_POST['agregar_contacto'])) 
 	{
 
 	$no_cuentaP = $_POST['no_cuenta'];
@@ -92,12 +90,22 @@ if ($YaExiste->num_rows > 0)
 
 	}
 
-
-
-
-
-				}else{ $errors[] = "No puedes agregar tu propia cuenta como un Contacto"; }
+    	}else{ $errors[] = "No puedes agregar tu propia cuenta como un Contacto"; }
 			}
+
+//*********************************** Comienza El Codigo de Transacciones ********************************************
+
+			if (isset($_POST['depositar']))
+			{
+				$CantTran = $_POST['CantTran'];
+				$ContactoSel = $_POST['contactos'];
+                  //codigo De transaccionnes
+                   echo "$CantTran , $ContactoSel";
+			
+
+			}
+
+
 ?>
 
 <html>
@@ -203,7 +211,7 @@ if ($YaExiste->num_rows > 0)
 									<tr>
 										<td scope="row">Saldo:</td>
 										<td>
-											<?php echo "$misaldo" ?>
+											<?php echo "Q.$misaldo" ?>
 										</td>
 
 									</tr>
@@ -215,15 +223,16 @@ if ($YaExiste->num_rows > 0)
 				</div>
 
 				<div id="menu2" class="tab-pane fade">
-					<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
+					<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
 						<div class="form-group tab-pane col-sm-6">
 							<h3>Contactos</h3>
 							<div class="box tab-pane">
-								<select name="estado">
+								<select name="contactos">
+								
 									<?php 
 		                     if ($resultC->num_rows > 0)
 		                     {
-		   
+								echo " <option value=''>Seleccione un contacto</option>"; 
 			                 while ($row = $resultC->fetch_array(MYSQLI_ASSOC)) 
 			                 {
 				             echo " <option value='".$row['no_cuenta']."'>".$row['no_cuenta']."</option>"; 
@@ -239,11 +248,11 @@ if ($YaExiste->num_rows > 0)
 						</div>
 						<div class="form-group tab-pane col-sm-6">
 							<div class="form-group">
-								<label for="no_cuenta">Catidad del deposito:</label>
-								<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
+								<label for="CantTran">Catidad de la transferencia:</label>
+								<input type="CantTran" name="CantTran" class="form-control" id="CantTran">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-default">Confirmar</button>
+								<button type="submit" class="btn btn-default " name="depositar">Confirmar</button>
 							</div>
 						</div>
 					</form>
@@ -258,7 +267,7 @@ if ($YaExiste->num_rows > 0)
 							<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-default">Confirmar</button>
+							<button type="submit" class="btn btn-default" name="agregar_contacto">Confirmar</button>
 						</div>
 					</form>
 

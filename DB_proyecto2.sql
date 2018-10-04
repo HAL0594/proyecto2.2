@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS `cuentas` (
   `NombreCuenta` varchar(50),
   `DPI` varchar(50),
   `saldo` DOUBLE NOT NULL,
-  `estado` boolean NOT NULL
+  `estado` boolean NOT NULL,
+  `PIN` int(11) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 
@@ -43,3 +44,11 @@ CREATE TABLE IF NOT EXISTS `transacciones` (
   `cantidad` DOUBLE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+INSERT INTO `cuentas` (`no_cuenta`, `NombreCuenta`, `DPI`, `saldo`, `estado`, `PIN`) VALUES 
+(NULL, 'Hugo Lepe', '0101-123456-123', '1000', '1', '123'),
+(NULL, 'Marvin Cortez', '0101-123456-12543', '1000', '1','123');
+
+INSERT INTO `usuarios` (`id_usuario`, `usuario`, `password`, `nombre`, `correo`, `last_session`, `activacion`, `telefono`, `no_cuenta`, `token`, `password_request`, `id_tipo`) VALUES 
+(NULL, 'HAL', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'HUGO', 'lepe0594@gmail.com', NULL, '1', '123', '10000', NULL, '0', '2'),
+(NULL, 'mcortez', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10001', NULL, '0', '1');

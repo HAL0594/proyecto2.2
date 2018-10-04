@@ -30,7 +30,7 @@ if (isset($_POST['Enviar'])) {
 
         
        if(registraCajero($usuario,$password,$nombre,$email,1,'0',3,$telefono,$no_cuenta)){
-			$errors[] = "Cajero ingresado con EXITO";
+			
 			unset($nombre);
 			unset($usuario);
 			unset($email);
@@ -38,6 +38,7 @@ if (isset($_POST['Enviar'])) {
 			unset($password);
 			unset($con_password);
 			unset($no_cuenta);	
+			$errors[] = "Cajero ingresado con EXITO";
 			
        }
 

@@ -52,3 +52,17 @@ INSERT INTO `cuentas` (`no_cuenta`, `NombreCuenta`, `DPI`, `saldo`, `estado`, `P
 INSERT INTO `usuarios` (`id_usuario`, `usuario`, `password`, `nombre`, `correo`, `last_session`, `activacion`, `telefono`, `no_cuenta`, `token`, `password_request`, `id_tipo`) VALUES 
 (NULL, 'HAL', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'HUGO', 'lepe0594@gmail.com', NULL, '1', '123', '10000', NULL, '0', '2'),
 (NULL, 'mcortez', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10001', NULL, '0', '1');
+
+
+
+
+CREATE TRIGGER `ActualizaSaldo` BEFORE INSERT ON `transacciones`
+ FOR EACH ROW BEGIN
+
+UPDATE cuentas SET saldo = saldo+new.cantidad WHERE no_cuenta = NEW.no_cuenta_destino;
+
+IF NEW.no_cuenta_origen > 0 then 
+UPDATE cuentas SET saldo = saldo-new.cantidad WHERE no_cuenta = NEW.no_cuenta_origen;
+END IF;
+
+END

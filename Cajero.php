@@ -34,7 +34,7 @@ $errors = array();
 				$lista = $TransacList->fetch_assoc(); 
 
                 $msg = $lista['cuenta'];
-				$errors[] = "la cuenta es $msg";
+				$errors[] = "Numero de cuenta creado $msg";
 				
 		   } else {
 			$errors[] = "Sucedio Algun Problema";

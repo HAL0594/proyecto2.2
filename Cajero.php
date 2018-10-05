@@ -86,11 +86,11 @@ $errors = array();
 
 				<div id='navbar' class='navbar-collapse collapse '>
 					<ul class='nav nav1 navbar-nav '>
-						<li> <a href='cliente.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
+						<li> <a href='cajero.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
 					</ul>
-					<?php if($_SESSION['tipo_usuario']==1) { ?>
+					<?php if($_SESSION['tipo_usuario']==3) { ?>
 					<ul class='nav nav1 navbar-nav'>
-						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Administrar Usuarios</a></li>
+						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Panel de Cajero</a></li>
 					</ul>
 					<?php } ?>
 					<ul class='nav nav1 navbar-nav navbar-right'>

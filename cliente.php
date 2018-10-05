@@ -121,7 +121,7 @@ if ($YaExiste->num_rows > 0)
 $SQLTransacList="SELECT descripcion, no_cuenta_origen, no_cuenta_destino, cantidad FROM transacciones WHERE no_cuenta_origen = '$micuenta' OR no_cuenta_destino = '$micuenta'";
 $TransacList = $mysqli->query($SQLTransacList);
 $len = $TransacList->num_rows;
-$lista = $TransacList->fetch_assoc();               
+           
 
 
 ?>
@@ -278,6 +278,7 @@ $lista = $TransacList->fetch_assoc();
 											 <?php
 
                                               for ($i = 0; $i < $len; $i++){
+												$lista = $TransacList->fetch_assoc();    
                                                    echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>Q." . $lista['cantidad'] . "</td></tr>";
                                              }
                                              ?>
@@ -300,9 +301,15 @@ $lista = $TransacList->fetch_assoc();
 		                     if ($resultC->num_rows > 0)
 		                     {
 								echo " <option value=''>Seleccione un contacto</option>"; 
+							
 			                 while ($row = $resultC->fetch_array(MYSQLI_ASSOC)) 
 			                 {
-				             echo " <option value='".$row['no_cuenta']."'>".$row['no_cuenta']."</option>"; 
+								$accu= $row['no_cuenta'];
+								$sql1= "SELECT NombreCuenta FROM cuentas WHERE no_cuenta = '$accu'";
+								$ResNomC = $mysqli->query($sql1);
+								$S1 = $ResNomC->fetch_assoc();
+								$NombreActual = $S1['NombreCuenta'];
+				             echo " <option value='".$accu."'>".$NombreActual.": ".$accu."</option>"; 
 			                 }
 		                     }
 		                     else

@@ -265,10 +265,10 @@ function login($usuario, $password)
 
                 if ($id_tipo == 1) {
                     header("location: Administrador.php");
-                } else if($id_tipo = 2) {
+                } else if($id_tipo == 2) {
                     header("location: cliente.php");
-                } else if($id_tipo = 3){
-                    header("location: Cajero.php");
+                } else if($id_tipo == 3){
+                    header("location: cajero.php");
                 } 
                 
 
@@ -355,7 +355,7 @@ function registraCajero($usuario, $pass_hash, $nombre, $email, $activo, $token, 
 
     $stmt = $mysqli->prepare("INSERT INTO usuarios (usuario, password, nombre, correo, activacion, telefono, 
     no_cuenta, token, id_tipo) VALUES(?,?,?,?,?,?,?,?,?)");
-    $stmt->bind_param('ssssiiisi', $usuario, $pass_hash, $nombre, $email, $activo, $token, $tipo_usuario, $telefono, $no_cuenta);
+    $stmt->bind_param('ssssiiisi', $usuario, $pass_hash, $nombre, $email, $activo, $telefono, $no_cuenta, $token, $tipo_usuario);
 
     if ($stmt->execute()) {
         return $mysqli->insert_id;

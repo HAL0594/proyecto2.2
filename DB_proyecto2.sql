@@ -48,11 +48,13 @@ CREATE TABLE IF NOT EXISTS `transacciones` (
 
 INSERT INTO `cuentas` (`no_cuenta`, `NombreCuenta`, `DPI`, `saldo`, `estado`, `PIN`) VALUES 
 (NULL, 'Hugo Lepe', '0101-123456-123', '1000', '1', '123'),
-(NULL, 'Marvin Cortez', '0101-123456-12543', '1000', '1','123');
+(NULL, 'Marvin Cortez', '0101-123456-12543', '1000', '1','123'),
+(NULL, 'Marleny', '0101-123456-12543', '1000', '1','123');
 
 INSERT INTO `usuarios` (`id_usuario`, `usuario`, `password`, `nombre`, `correo`, `last_session`, `activacion`, `telefono`, `no_cuenta`, `token`, `password_request`, `id_tipo`) VALUES 
 (NULL, 'HAL', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'HUGO', 'lepe0594@gmail.com', NULL, '1', '123', '10000', NULL, '0', '2'),
-(NULL, 'mcortez', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10001', NULL, '0', '1');
+(NULL, 'mcortez', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10001', NULL, '0', '1'),
+(NULL, 'marleny', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10002', NULL, '0', '3');
 
 INSERT INTO `terceros` (`id_usuario`, `no_cuenta`, `permitido`, `token`) VALUES 
 (10000, 10001, 1,'8fe163dcb45290e153a9270b517bfe40');

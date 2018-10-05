@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `transacciones` (
   `descripcion` varchar(50),
   `no_cuenta_origen` int(11),
   `no_cuenta_destino` int(11),
-  `cantidad` DOUBLE NOT NULL
+  `cantidad` DOUBLE NOT NULL,
+  `Fecha_Transaccion` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -53,16 +54,18 @@ INSERT INTO `usuarios` (`id_usuario`, `usuario`, `password`, `nombre`, `correo`,
 (NULL, 'HAL', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'HUGO', 'lepe0594@gmail.com', NULL, '1', '123', '10000', NULL, '0', '2'),
 (NULL, 'mcortez', '$2y$10$yT22kzUk9RuhStYxmiBei.a4k41urP30/3/BYR5TsTL0y.XLzqHhu', 'MARVIN', 'rjorge828@gmail.com', NULL, '1', '123', '10001', NULL, '0', '1');
 
+INSERT INTO `terceros` (`id_usuario`, `no_cuenta`, `permitido`, `token`) VALUES 
+(10000, 10001, 1,'8fe163dcb45290e153a9270b517bfe40');
+
 
 
 
 CREATE TRIGGER `ActualizaSaldo` BEFORE INSERT ON `transacciones`
  FOR EACH ROW BEGIN
-
 UPDATE cuentas SET saldo = saldo+new.cantidad WHERE no_cuenta = NEW.no_cuenta_destino;
-
 IF NEW.no_cuenta_origen > 0 then 
 UPDATE cuentas SET saldo = saldo-new.cantidad WHERE no_cuenta = NEW.no_cuenta_origen;
 END IF;
 
 END
+

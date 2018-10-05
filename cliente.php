@@ -100,10 +100,28 @@ if ($YaExiste->num_rows > 0)
 				$CantTran = $_POST['CantTran'];
 				$ContactoSel = $_POST['contactos'];
                   //codigo De transaccionnes
-                   echo "$CantTran , $ContactoSel";
+				  if($misaldo > $CantTran)
+				  {
+				  $DescTrans = "transaccion";  
+				  $RTransac = RealizaTrans($DescTrans, $micuenta, $ContactoSel, $CantTran);
+				  if($RTransac > 0)
+					 echo "la transaccion se realiza correctamente"; 
+					 header("Location: cliente.php");
+				  }
+				  else
+				  {
+					$errors[] = "Error al realizar la transaccion";
+				  }
 			
 
 			}
+
+//******************************** LISTA DE Transacciones **********************************************************#endregion
+
+$SQLTransacList="SELECT descripcion, no_cuenta_origen, no_cuenta_destino, cantidad FROM transacciones WHERE no_cuenta_origen = '$micuenta' OR no_cuenta_destino = '$micuenta'";
+$TransacList = $mysqli->query($SQLTransacList);
+$len = $TransacList->num_rows;
+$lista = $TransacList->fetch_assoc();               
 
 
 ?>
@@ -131,11 +149,32 @@ if ($YaExiste->num_rows > 0)
 	height: 40px;
 	}
 
-	.form-group{
-		padding-top: 5px;
-		
-	}
+.table-fixed thead,
+.table-fixed tfoot{
+  width: 97%;
+}
 
+.table-fixed tbody {
+  height: 230px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tfoot,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+  display: inline-block;
+}
+
+.table-fixed tbody td,
+.table-fixed thead > tr> th,
+.table-fixed tfoot > tr> td{
+
+  border-bottom-width: 0;
+}
 	</style>
 </head>
 
@@ -219,6 +258,38 @@ if ($YaExiste->num_rows > 0)
 							</table>
 
 						</div>
+						<div class="form-group tab-pane col-sm-2">
+</div>
+						<div class="form-group tab-pane col-sm-4">
+							<h3>Lista de transacciones</h3>
+						<div class="panel panel-default">
+                        <div class="panel-body">
+						<table class="table table-fixed">
+								<thead>
+									<tr>
+										<th>No.:</th>
+										<th>Tipo:</th>
+										<th>Origen:</th>
+										<th>Destino:</th>
+										<th>Monto:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+
+for ($i = 0; $i < $len; $i++){
+
+
+   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>" . $lista['cantidad'] . "</td></tr>";
+   
+   
+}
+?>
+</tbody>
+							</table>
+						</div>	
+						</div>	
+						</div>	
 					</form>
 				</div>
 

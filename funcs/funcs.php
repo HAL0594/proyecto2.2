@@ -363,4 +363,19 @@ function registraCajero($usuario, $pass_hash, $nombre, $email, $activo, $token, 
         return 0;
     }
 }
+
+function RealizaTrans($Descrip, $CuenOrig, $CuenDest, $Monto )
+{
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("INSERT INTO transacciones (descripcion, no_cuenta_origen, no_cuenta_destino, cantidad, Fecha_Transaccion) VALUES(?,?,?,?,NOW())");
+    $stmt->bind_param('siid', $Descrip, $CuenOrig, $CuenDest, $Monto);
+
+    if ($stmt->execute()) {
+        return $mysqli->insert_id;
+    } else {
+        return 0;
+    }
+}
+
 ?>

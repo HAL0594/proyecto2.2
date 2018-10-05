@@ -226,7 +226,7 @@ $lista = $TransacList->fetch_assoc();
 				<div id="menu1" class="tab-pane fade in active">
 					<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
 						<div class="form-group tab-pane col-sm-6">
-							<h3>Estado De Cuenta</h3>
+							<h3>Datos de Cuenta</h3>
 							<table class="table table-hover">
 								<thead>
 									<tr>
@@ -236,13 +236,13 @@ $lista = $TransacList->fetch_assoc();
 								</thead>
 								<tbody>
 									<tr>
-										<th scope="row">Usuarios:</th>
+										<th scope="row">Usuario:</th>
 										<td>
 											<?php echo "$minombre" ?>
 										</td>
 									</tr>
 									<tr>
-										<td scope="row">Cuenta:</td>
+										<td scope="row">No. de Cuenta:</td>
 										<td>
 											<?php echo "$micuenta" ?>
 										</td>
@@ -280,7 +280,7 @@ $lista = $TransacList->fetch_assoc();
 for ($i = 0; $i < $len; $i++){
 
 
-   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>" . $lista['cantidad'] . "</td></tr>";
+   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>Q." . $lista['cantidad'] . "</td></tr>";
    
    
 }

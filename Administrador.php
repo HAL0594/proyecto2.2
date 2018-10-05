@@ -47,6 +47,14 @@ if (isset($_POST['Enviar'])) {
         $errors[] = "Error El Password no coincide";
     }
 }
+
+//******************************** LISTA DE CAJEROS **********************************************************#endregion
+$CajeTipo = 3;
+$SQLTransacList="SELECT id_usuario, usuario, nombre, correo, activacion, telefono, no_cuenta  FROM usuarios WHERE id_tipo = '$CajeTipo'";
+$TransacList = $mysqli->query($SQLTransacList);
+$len = $TransacList->num_rows;
+$lista = $TransacList->fetch_assoc();               
+
 ?>
 
 <html>
@@ -61,7 +69,7 @@ if (isset($_POST['Enviar'])) {
 
 	<style>
 
-	body {
+		body {
 			padding-top: 20px;
 			}
 
@@ -110,35 +118,38 @@ if (isset($_POST['Enviar'])) {
 
 		<div class="container-fluid">
 
-  <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li class="active"><a data-toggle="tab" href="#menu1">Agregar Cajeros</a></li>
-    <li><a data-toggle="tab" href="#menu2">Lista de Cajeros</a></li>
-  </ul>
+			<ul class="nav nav-tabs nav-justified" role="tablist">
+				<li class="active"><a data-toggle="tab" href="#menu1">Agregar Cajeros</a></li>
+				<li><a data-toggle="tab" href="#menu2">Lista de Cajeros</a></li>
+			</ul>
 
-<div class="tab-content">
+			<div class="tab-content">
 
-<div id="menu1" class="tab-pane fade in active">
-	<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
-		<div class="form-group tab-pane col-sm-6">
-		
-		                    <div class="form-group">
+				<div id="menu1" class="tab-pane fade in active">
+					<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+						<div class="form-group tab-pane col-sm-12">
+
+							<div class="form-group">
 								<label for="nombre" class="col-md-3 control-label">Nombre:</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php if (isset($nombre)) echo $nombre; ?>" required >
+									<input type="text" class="form-control" name="nombre" placeholder="Nombre" value="<?php if (isset($nombre)) echo $nombre; ?>"
+									 required>
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label for="usuario" class="col-md-3 control-label">Usuario</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="usuario" placeholder="Usuario" value="<?php if (isset($usuario)) echo $usuario; ?>" required>
+									<input type="text" class="form-control" name="usuario" placeholder="Usuario" value="<?php if (isset($usuario)) echo $usuario; ?>"
+									 required>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label for="no_cuenta" class="col-md-3 control-label">Cuenta</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="no_cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($no_cuenta)) echo $no_cuenta; ?>" required>
+									<input type="text" class="form-control" name="no_cuenta" placeholder="Ingrese cuenta de trabajador" value="<?php if (isset($no_cuenta)) echo $no_cuenta; ?>"
+									 required>
 								</div>
 							</div>
 
@@ -146,14 +157,16 @@ if (isset($_POST['Enviar'])) {
 							<div class="form-group">
 								<label for="email" class="col-md-3 control-label">Email</label>
 								<div class="col-md-9">
-									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if (isset($email)) echo $email; ?>" required>
+									<input type="email" class="form-control" name="email" placeholder="Email" value="<?php if (isset($email)) echo $email; ?>"
+									 required>
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label for="telefono" class="col-md-3 control-label">Telefono</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" name="telefono" placeholder="Telefono" value="<?php if (isset($telefono)) echo $telefono; ?>" required>
+									<input type="text" class="form-control" name="telefono" placeholder="Telefono" value="<?php if (isset($telefono)) echo $telefono; ?>"
+									 required>
 								</div>
 							</div>
 
@@ -163,71 +176,76 @@ if (isset($_POST['Enviar'])) {
 									<input type="password" class="form-control" name="password" placeholder="Password" required>
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<label for="con_password" class="col-md-3 control-label">Confirmar Password</label>
 								<div class="col-md-9">
 									<input type="password" class="form-control" name="con_password" placeholder="Confirmar Password" required>
 								</div>
 							</div>
-													
+
 							<div class="form-group">
 								<label for="captcha" class="col-md-3 control-label"></label>
-								<div class="g-recaptcha col-md-9" data-sitekey="6Lc8yW8UAAAAAIcxLTkix1A_xX4YtHtVddqoJNHP"></div> <!-- clave recaptcha -->
+								<div class="g-recaptcha col-md-9" data-sitekey="6Lc8yW8UAAAAAIcxLTkix1A_xX4YtHtVddqoJNHP"></div>
+								<!-- clave recaptcha -->
 							</div>
-							
-							<div class="form-group">                             
+
+							<div class="form-group">
 								<div class="col-md-offset-3 col-md-9">
-									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar"><i class="icon-hand-right"></i>Registrar</button> 
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar"><i class="icon-hand-right"></i>Registrar</button>
 								</div>
 							</div>
-							<div class="form-group"><?php echo resultBlock($errors); ?></div>
+							<div class="form-group">
+								<?php echo resultBlock($errors); ?>
+							</div>
 
-		</div>
-	</form>
-		
-</div>
+						</div>
+					</form>
 
-<div id="menu2" class="tab-pane fade">
-	<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
-		<div class="form-group tab-pane col-sm-6">
-			<h3>Contactos</h3>
-			<div class="box tab-pane">
-				<select name="estado">
-					<?php 
-			 if ($resultC->num_rows > 0)
-			 {
+				</div>
 
-			 while ($row = $resultC->fetch_array(MYSQLI_ASSOC)) 
-			 {
-			 echo " <option value='".$row['no_cuenta']."'>".$row['no_cuenta']."</option>"; 
-			 }
-			 }
-			 else
-			 {
-			 echo " <option value='Sin Contactos'>Sin Contactos</option>"; 
-			 }
-			 ?>
-				</select>
+				<div id="menu2" class="tab-pane fade">
+					<form class="form-horizontal" action="TransacClientes" method="POST" autocomplete="off">
+						<div class="form-group tab-pane col-sm-12">
+
+                                     <table class="table table-fixed">
+										<thead>
+											<tr>
+												<th>ID:</th>
+												<th>Usuario</th>
+												<th>Nombre</th>
+												<th>Correo</th>
+												<th>Estado</th>
+												<th>Telefono</th>
+												<th>No. Cuenta</th>
+											</tr>
+										</thead>
+										<tbody>
+											 <?php
+                                                    $esta = $lista['activacion'];
+                                              for ($i = 0; $i < $len; $i++){
+												$esta = $lista['activacion'];
+                                                 if($esta > 0){
+                                                $estaD = "Habilitado";
+												 }else{
+												$estaD = "Deshabilitado";
+												 }
+
+                                                   echo "<tr><td width: 5%>". $lista['id_usuario']  . "</td><td>" . $lista['usuario'] . "</td><td>". $lista['nombre']  . "</td><td>" . $lista['correo'] . "</td><td>" . $estaD . "</td><td>" . $lista['telefono'] . "</td><td>" . $lista['no_cuenta'] . "</td></tr>";
+                                             }
+                                             ?>
+										</tbody>
+									</table>
+
+						</div>
+					</form>
+				</div>
+
+
 			</div>
 		</div>
-		<div class="form-group tab-pane col-sm-6">
-			<div class="form-group">
-				<label for="no_cuenta">Catidad del deposito:</label>
-				<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-default">Confirmar</button>
-			</div>
-		</div>
-	</form>
-</div>
 
-
-</div>
-</div>
-
-</div>
+	</div>
 
 </body>
 

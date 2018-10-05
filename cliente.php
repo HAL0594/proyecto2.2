@@ -259,37 +259,33 @@ $lista = $TransacList->fetch_assoc();
 
 						</div>
 						<div class="form-group tab-pane col-sm-2">
-</div>
+						</div>
 						<div class="form-group tab-pane col-sm-4">
 							<h3>Lista de transacciones</h3>
-						<div class="panel panel-default">
-                        <div class="panel-body">
-						<table class="table table-fixed">
-								<thead>
-									<tr>
-										<th>No.:</th>
-										<th>Tipo:</th>
-										<th>Origen:</th>
-										<th>Destino:</th>
-										<th>Monto:</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<table class="table table-fixed">
+										<thead>
+											<tr>
+												<th>No.:</th>
+												<th>Tipo:</th>
+												<th>Origen:</th>
+												<th>Destino:</th>
+												<th>Monto:</th>
+											</tr>
+										</thead>
+										<tbody>
+											 <?php
 
-for ($i = 0; $i < $len; $i++){
-
-
-   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>Q." . $lista['cantidad'] . "</td></tr>";
-   
-   
-}
-?>
-</tbody>
-							</table>
-						</div>	
-						</div>	
-						</div>	
+                                              for ($i = 0; $i < $len; $i++){
+                                                   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['descripcion'] . "</td><td>". $lista['no_cuenta_origen']  . "</td><td>" . $lista['no_cuenta_destino'] . "</td><td>Q." . $lista['cantidad'] . "</td></tr>";
+                                             }
+                                             ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</form>
 				</div>
 
@@ -299,7 +295,7 @@ for ($i = 0; $i < $len; $i++){
 							<h3>Contactos</h3>
 							<div class="box tab-pane">
 								<select name="contactos">
-								
+
 									<?php 
 		                     if ($resultC->num_rows > 0)
 		                     {

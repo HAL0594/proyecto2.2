@@ -1,5 +1,5 @@
 <?php
-
+$errors = array();
 
 	session_start();
 	require 'funcs/conexion.php';
@@ -15,6 +15,39 @@
 	$result = $mysqli->query($sql);
 	
 	$row = $result->fetch_assoc();
+
+
+	if (isset($_POST['Enviar'])) {
+
+		$nombre = $_POST['nombre'];
+		$dpi = $_POST['dpi'];
+		$pin = $_POST['pin'];
+		
+		   if(RegistraCuenta($nombre, $dpi, $pin)){
+				
+				unset($nombre);
+				unset($dpi);
+				unset($pin);
+				
+				$SQLTransacList="SELECT max(no_cuenta) as cuenta FROM cuentas";
+				$TransacList = $mysqli->query($SQLTransacList);
+				$lista = $TransacList->fetch_assoc(); 
+
+                $msg = $lista['cuenta'];
+				$errors[] = "la cuenta es $msg";
+				
+		   } else {
+			$errors[] = "Sucedio Algun Problema";
+		}
+	}
+	
+
+
+
+
+
+
+
 ?>
 
 <html>
@@ -32,14 +65,6 @@
 	body {
 			padding-top: 20px;
 			}
-
-.bordered-tab-contents , .tab-content  {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-    border-radius: 0px 0px 5px 5px;
-    padding: 10px;
-}
 
 	</style>
 </head>
@@ -86,24 +111,72 @@
 
 
   <ul class="nav nav-tabs nav-justified" role="tablist">
-    <li class="active"><a data-toggle="tab" href="#menu1">Agregar Cuentas de Terceros</a></li>
-    <li><a data-toggle="tab" href="#menu2">Transferencias</a></li>
-    <li><a data-toggle="tab" href="#menu3">Estado De Cuenta</a></li>
+    <li class="active"><a data-toggle="tab" href="#menu1">Creacion de Cuentas</a></li>
+    <li><a data-toggle="tab" href="#menu2">Deposito</a></li>
+    <li><a data-toggle="tab" href="#menu3">Retiros</a></li>
   </ul>
 
   <div class="tab-content">
     <div id="menu1" class="tab-pane fade in active">
-      <h3>Agregar Cuentas de Terceros</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+      
+	  
+	  <h3>Ingresar la Informacion Solicitada</h3>
+      
+	  <p>
+
+	  <form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+		<div class="form-group tab-pane col-sm-6">
+		
+		                    <div class="form-group">
+								<label for="nombre" class="col-md-3 control-label">Nombre:</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="nombre" placeholder="Ingrese Nombre" value="<?php if (isset($nombre)) echo $nombre; ?>" required >
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="dpi" class="col-md-3 control-label">DPI</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="dpi" placeholder="Ingrese el DPI" value="<?php if (isset($dpi)) echo $dpi; ?>" required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="pin" class="col-md-3 control-label">PIN</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="pin" placeholder="Ingrese el pin de la cuenta" value="<?php if (isset($pin)) echo $pin; ?>" required>
+								</div>
+							</div>
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-9">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar"><i class="icon-hand-right"></i>Registrar</button> 
+								</div>
+							</div>
+							<div class="form-group"><?php echo resultBlock($errors); ?></div>
+
+		</div>
+	</form>
+	  
+	  
+	  </p>
+    
+	
+	</div>
     <div id="menu2" class="tab-pane fade">
-      <h3>Transferencias</h3>
+      
+	  
+	  <h3>Transferencias</h3>
       <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-    </div>
+    
+	</div>
     <div id="menu3" class="tab-pane fade">
-      <h3>Estado De Cuenta</h3>
+      
+	  
+	  <h3>Estado De Cuenta</h3>
       <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-    </div>
+    
+	</div>
   </div>
 
 

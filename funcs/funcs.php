@@ -378,4 +378,22 @@ function RealizaTrans($Descrip, $CuenOrig, $CuenDest, $Monto )
     }
 }
 
+function RegistraCuenta($nombre, $dpi, $pin)
+{
+
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("INSERT INTO `cuentas` (`no_cuenta`, `NombreCuenta`, `DPI`, `saldo`, `estado`, `PIN`) VALUES 
+    (NULL, ?, ?, 0, 1, ?)");
+    $stmt->bind_param('ssi', $nombre, $dpi, $pin);
+
+    if ($stmt->execute()) {
+        return $mysqli->insert_id;
+    } else {
+        return 0;
+    }
+}
+
+
+
 ?>

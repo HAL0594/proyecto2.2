@@ -69,7 +69,7 @@ if (isset($_POST['EnviarDeposito'])) {
 	$CuentaDeposito = $_POST['cuenta'];
 
 	
-	$DescTrans = "transaccion";
+	$DescTrans = "Deposito";
 	$RTransac = RealizaDepRet($DescTrans, $CuentaDeposito, $CantTran);
 	if ($RTransac > 0) {
 		echo "la transaccion se realiza correctamente";
@@ -89,12 +89,19 @@ if (isset($_POST['EnviarDeposito'])) {
 
 //******************************** Retiro **********************************************************
 
-if (isset($_POST['EnviaRetiro'])) {
+if (isset($_POST['EnviarRetiro'])) {
 
-	$cuenta = $_POST['monto'];
+	$CantTran = $_POST['monto']*-1;
+	$CuentaRetiro = $_POST['cuenta'];
 
+	
+	$DescTrans = "Retiro";
+	$RTransac = RealizaDepRet($DescTrans, $CuentaRetiro, $CantTran);
+	if ($RTransac > 0) {
+		echo "la transaccion se realiza correctamente";
+	}
 
-	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
+	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$CuentaRetiro'";
 	$CuentaLista = $mysqli->query($SQLCuenta);
 	$len = $CuentaLista->num_rows;
 
@@ -102,7 +109,6 @@ if (isset($_POST['EnviaRetiro'])) {
 		$lista = $CuentaLista->fetch_assoc();
 	} else
 		$errors[] = "la cuenta no es valida";
-
 
 }
 
@@ -273,6 +279,8 @@ if (isset($_POST['EnviaRetiro'])) {
 							<div class="form-group"><?php echo resultBlock($errors); ?></div>
 
 		</div>
+		<div class="form-group tab-pane col-sm-1">
+		</div>
 		<div class="form-group tab-pane col-sm-5">
 							<h3>Informacion de la Cuenta</h3>
 							<div class="panel panel-default">
@@ -290,10 +298,21 @@ if (isset($_POST['EnviaRetiro'])) {
 										</thead>
 										<tbody>
 											 <?php
-
+if (isset($_POST['Enviar1'])) {
 											for ($i = 0; $i < $len; $i++) {
 												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
 											}
+										}
+										if (isset($_POST['EnviarDeposito'])) {
+											for ($i = 0; $i < $len; $i++) {
+												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+											}
+										}
+										if (isset($_POST['EnviarRetiro'])) {
+											for ($i = 0; $i < $len; $i++) {
+												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+											}
+										}
 											?>
 										</tbody>
 									</table>

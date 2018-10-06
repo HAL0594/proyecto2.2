@@ -69,7 +69,7 @@ if (isset($_POST['EnviarDeposito'])) {
 	$CuentaDeposito = $_POST['cuenta'];
 
 	
-	$DescTrans = "transaccion";
+	$DescTrans = "Deposito";
 	$RTransac = RealizaDepRet($DescTrans, $CuentaDeposito, $CantTran);
 	if ($RTransac > 0) {
 		echo "la transaccion se realiza correctamente";

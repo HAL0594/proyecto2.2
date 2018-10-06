@@ -232,7 +232,7 @@ function lastSession($id)
 {
     global $mysqli;
 
-    $stmt = $mysqli->prepare("UPDATE usuarios SET last_session=NOW(), password_request=1 WHERE id_usuario = ?");
+    $stmt = $mysqli->prepare("UPDATE usuarios SET last_session=NOW(), password_request=password_request +1 WHERE id_usuario = ?");
     $stmt->bind_param('s', $id);
     $stmt->execute();
     $stmt->close();

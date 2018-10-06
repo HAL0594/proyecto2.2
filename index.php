@@ -5,16 +5,15 @@ include 'funcs/funcs.php';
 
 $errors = array();
 
-if(!empty($_POST)){
-    $usuario = $mysqli->real_escape_string($_POST['usuario']);
-    $password = $mysqli->real_escape_string($_POST['password']);
+if (!empty($_POST)) {
+  $usuario = $mysqli->real_escape_string($_POST['usuario']);
+  $password = $mysqli->real_escape_string($_POST['password']);
 
-   if(isNullLogin($usuario, $password))
-   {
-       $errors[] = "Debe llenar todos los campos";
-   }
+  if (isNullLogin($usuario, $password)) {
+    $errors[] = "Debe llenar todos los campos";
+  }
 
-   $errors[] = login($usuario, $password);
+  $errors[] = login($usuario, $password);
 }
 ?>
 
@@ -42,7 +41,7 @@ if(!empty($_POST)){
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#myPage">MI Banca</a>
+      <a class="navbar-brand" href="#myPage"> Mi Barca Electronica</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
@@ -54,8 +53,14 @@ if(!empty($_POST)){
 </nav>
 
 <div class="jumbotron text-center">
-  <h1>MI Banca</h1>
-  <p>Especialistas en Banca en linea</p>
+  <h1>Banco HMM</h1>
+  <p>Proyecto 2 de Desarrollo Web</p>
+  <p align="right">Integrantes:<br>Hugo Andres Lepe Salinas 0900-13-12-180<br>
+  Marvin Rolando Cortez 0900-00-2593<br>
+  Ester Marleny Rivas Benegas 0900-06-336</p>
+  
+
+ 
 </div>
 
 <!-- Seccion Acerca De-->
@@ -77,32 +82,28 @@ if(!empty($_POST)){
           <div class="item active">
             <img src="img/1.jpg" alt="Chania">
             <div class="carousel-caption">
-              <h3>SLIDER 1</h3>
-              <p>ESTE ES EL COMENTARIO DEL SLIDER 1 </p>
+              <p>AHORRE TIEMPO Y DINERO HAGA SUS OPERACIONES EN LINEA</p>
             </div>
           </div>
 
           <div class="item">
             <img src="img/2.jpg" alt="Chania">
             <div class="carousel-caption">
-              <h3>SLIDER 2</h3>
-              <p>ESTE ES EL COMENTARIO DEL SLIDER 2 </p>
+              <p>DESDE LA COMODIDA DE LA CASA</p>
             </div>
           </div>
 
           <div class="item">
             <img src="img/3.jpg" alt="Flower">
             <div class="carousel-caption">
-              <h3>SLIDER 3</h3>
-              <p>ESTE ES EL COMENTARIO DEL SLIDER 3 </p>
+              <p>SIN LARGAS COLAS</p>
             </div>
           </div>
 
           <div class="item">
             <img src="img/4.jpg" alt="Flower">
             <div class="carousel-caption">
-              <h3>SLIDER 4</h3>
-              <p>ESTE ES EL COMENTARIO DEL SLIDER 4 </p>
+              <p>TRANSACCIONES AL INSTANTE</p>
             </div>
           </div>
         </div>
@@ -117,7 +118,17 @@ if(!empty($_POST)){
           <span class="sr-only">Next</span>
         </a>
       </div>
-      <p>Texto Aqui</p>
+      <H1>Misión</H1>
+      <H3>El desarrollo de nuestros Colaboradores, Clientes, Accionistas, Corporación y de nuestra comunidad.</H3>
+      <H1>Visión</H1>
+<H3>Ser la primera opción para los centroamericanos y la institución financiera más grande de Centroamérica.</H3>
+
+<H1>Valores</H1>
+<p>Entrega<br>
+Trabajo en Equipo<br>
+Innovación<br>
+Amor a la Patria<br>
+Integridad</P>
 
     </div>
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-4 ">

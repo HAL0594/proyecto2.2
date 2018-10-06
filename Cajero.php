@@ -16,6 +16,7 @@ $errors = array();
 	
 	$row = $result->fetch_assoc();
 
+//******************************** Creacion de cuentas **********************************************************
 
 	if (isset($_POST['Enviar'])) {
 
@@ -41,7 +42,25 @@ $errors = array();
 		}
 	}
 	
+//******************************** Consulta Cuentas **********************************************************
 
+	if (isset($_POST['Enviar1'])) {
+
+		$cuenta = $_POST['cuenta'];
+		
+		 			
+			$SQLCuenta="SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
+			$CuentaLista = $mysqli->query($SQLCuenta);
+			$len = $CuentaLista->num_rows;
+			
+				if($len > 0){
+					$lista = $CuentaLista->fetch_assoc();
+				} else
+				$errors[] = "la cuenta no es valida";
+				
+		
+	}
+	
 
 
 
@@ -112,8 +131,7 @@ $errors = array();
 
   <ul class="nav nav-tabs nav-justified" role="tablist">
     <li class="active"><a data-toggle="tab" href="#menu1">Creacion de Cuentas</a></li>
-    <li><a data-toggle="tab" href="#menu2">Deposito</a></li>
-    <li><a data-toggle="tab" href="#menu3">Retiros</a></li>
+    <li><a data-toggle="tab" href="#menu2">Transacciones</a></li>
   </ul>
 
   <div class="tab-content">
@@ -157,8 +175,6 @@ $errors = array();
 
 		</div>
 	</form>
-	  
-	  
 	  </p>
     
 	
@@ -166,17 +182,94 @@ $errors = array();
     <div id="menu2" class="tab-pane fade">
       
 	  
-	  <h3>Transferencias</h3>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-    
-	</div>
-    <div id="menu3" class="tab-pane fade">
-      
+	  <h3>Ingrese la informacion para el Deposito</h3>
+      <p>
 	  
-	  <h3>Estado De Cuenta</h3>
-      <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+	  <form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+		<div class="form-group tab-pane col-sm-6">
+		
+		                    <div class="form-group">
+								<label for="cuenta" class="col-md-3 control-label">Cuenta:</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="cuenta" placeholder="Ingrese el numero de cuenta" value="<?php if (isset($cuenta)) echo $cuenta; ?>" required >
+									
+								</div>
+							</div>
+							
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-9">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar1"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
+								</div>
+							</div>
+							<div class="form-group"><?php echo resultBlock($errors); ?></div>
+
+		</div>
+		<div class="form-group tab-pane col-sm-4">
+							<h3>Informacion de la Cuenta</h3>
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<table class="table table-fixed">
+										<thead>
+											<tr>
+												<th>No cuenta:</th>
+												<th>Nombre Cuenta:</th>
+												<th>DPI:</th>
+												<th>Saldo:</th>
+												<th>Estado:</th>
+											</tr>
+										</thead>
+										<tbody>
+											 <?php
+																						
+                                        		for ($i = 0; $i < $len; $i++){
+                                                   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>". $lista['NombreCuenta'] ."</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+                                             	}
+                                             ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+	</form>
+	  
+	<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+		<div class="form-group tab-pane col-sm-6">
+		
+		                    <div class="form-group">
+								<label for="monto" class="col-md-3 control-label">Ingrese el Monto</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="monto" placeholder="Ingrese el monto" value="<?php if (isset($cuenta)) echo $cuenta; ?>" required >
+									
+								</div>
+							</div>
+							
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-3">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarDeposito"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
+								</div>
+							</div>
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-3">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarRetiro"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
+								</div>
+							</div>
+
+
+
+
+
+							<div class="form-group"><?php echo resultBlock($errors); ?></div>
+
+		</div>
+
+
+	  </p>
     
 	</div>
+    
   </div>
 
 

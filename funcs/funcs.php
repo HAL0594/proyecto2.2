@@ -394,6 +394,19 @@ function RegistraCuenta($nombre, $dpi, $pin)
     }
 }
 
+function RealizaDepRet($Descrip, $CuenDest, $Monto )
+{
+    global $mysqli;
+
+    $stmt = $mysqli->prepare("INSERT INTO transacciones (descripcion, no_cuenta_destino, cantidad, Fecha_Transaccion) VALUES(?,?,?,NOW())");
+    $stmt->bind_param('sid', $Descrip, $CuenDest, $Monto);
+
+    if ($stmt->execute()) {
+        return $mysqli->insert_id;
+    } else {
+        return 0;
+    }
+}
 
 
 ?>

@@ -1,68 +1,110 @@
 <?php
 $errors = array();
 
-	session_start();
-	require 'funcs/conexion.php';
-	include 'funcs/funcs.php';
-	
-	if(!isset($_SESSION["id_usuario"])){ //Si no ha iniciado sesión redirecciona a index.php
-		header("Location: index.php");
-	}
-	
-	$idUsuario = $_SESSION['id_usuario'];
-	
-	$sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'";
-	$result = $mysqli->query($sql);
-	
-	$row = $result->fetch_assoc();
+session_start();
+require 'funcs/conexion.php';
+include 'funcs/funcs.php';
+
+if (!isset($_SESSION["id_usuario"])) { //Si no ha iniciado sesión redirecciona a index.php
+	header("Location: index.php");
+}
+
+$idUsuario = $_SESSION['id_usuario'];
+
+$sql = "SELECT id_usuario, nombre FROM usuarios WHERE id_usuario = '$idUsuario'";
+$result = $mysqli->query($sql);
+
+$row = $result->fetch_assoc();
 
 //******************************** Creacion de cuentas **********************************************************
 
-	if (isset($_POST['Enviar'])) {
+if (isset($_POST['Enviar'])) {
 
-		$nombre = $_POST['nombre'];
-		$dpi = $_POST['dpi'];
-		$pin = $_POST['pin'];
-		
-		   if(RegistraCuenta($nombre, $dpi, $pin)){
-				
-				unset($nombre);
-				unset($dpi);
-				unset($pin);
-				
-				$SQLTransacList="SELECT max(no_cuenta) as cuenta FROM cuentas";
-				$TransacList = $mysqli->query($SQLTransacList);
-				$lista = $TransacList->fetch_assoc(); 
+	$nombre = $_POST['nombre'];
+	$dpi = $_POST['dpi'];
+	$pin = $_POST['pin'];
 
-                $msg = $lista['cuenta'];
-				$errors[] = "Numero de cuenta creado $msg";
-				
-		   } else {
-			$errors[] = "Sucedio Algun Problema";
-		}
+	if (RegistraCuenta($nombre, $dpi, $pin)) {
+
+		unset($nombre);
+		unset($dpi);
+		unset($pin);
+
+		$SQLTransacList = "SELECT max(no_cuenta) as cuenta FROM cuentas";
+		$TransacList = $mysqli->query($SQLTransacList);
+		$lista = $TransacList->fetch_assoc();
+
+		$msg = $lista['cuenta'];
+		$errors[] = "Numero de cuenta creado $msg";
+
+	} else {
+		$errors[] = "Sucedio Algun Problema";
 	}
+}
 	
 //******************************** Consulta Cuentas **********************************************************
 
-	if (isset($_POST['Enviar1'])) {
+if (isset($_POST['Enviar1'])) {
 
-		$cuenta = $_POST['cuenta'];
-		
-		 			
-			$SQLCuenta="SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
-			$CuentaLista = $mysqli->query($SQLCuenta);
-			$len = $CuentaLista->num_rows;
-			
-				if($len > 0){
-					$lista = $CuentaLista->fetch_assoc();
-				} else
-				$errors[] = "la cuenta no es valida";
-				
-		
-	}
+	$cuenta = $_POST['cuenta'];
+
+
+	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
+	$CuentaLista = $mysqli->query($SQLCuenta);
+	$len = $CuentaLista->num_rows;
+
+	if ($len > 0) {
+		$lista = $CuentaLista->fetch_assoc();
+	} else
+		$errors[] = "la cuenta no es valida";
+
+
+}
 	
+//******************************** Deposito **********************************************************
+
+if (isset($_POST['EnviarDeposito'])) {
+
+	$CantTran = $_POST['monto'];
+	$CuentaDeposito = $_POST['cuenta'];
+
+	
+	$DescTrans = "transaccion";
+	$RTransac = RealizaDepRet($DescTrans, $CuentaDeposito, $CantTran);
+	if ($RTransac > 0) {
+		echo "la transaccion se realiza correctamente";
+	}
+
+	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$CuentaDeposito'";
+	$CuentaLista = $mysqli->query($SQLCuenta);
+	$len = $CuentaLista->num_rows;
+
+	if ($len > 0) {
+		$lista = $CuentaLista->fetch_assoc();
+	} else
+		$errors[] = "la cuenta no es valida";
 
 
+}
+
+//******************************** Retiro **********************************************************
+
+if (isset($_POST['EnviaRetiro'])) {
+
+	$cuenta = $_POST['monto'];
+
+
+	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
+	$CuentaLista = $mysqli->query($SQLCuenta);
+	$len = $CuentaLista->num_rows;
+
+	if ($len > 0) {
+		$lista = $CuentaLista->fetch_assoc();
+	} else
+		$errors[] = "la cuenta no es valida";
+
+
+}
 
 
 
@@ -107,18 +149,19 @@ $errors = array();
 					<ul class='nav nav1 navbar-nav '>
 						<li> <a href='cajero.php' class='LogM'> <i class='glyphicon glyphicon-home'></i> MiBanca</a></li>
 					</ul>
-					<?php if($_SESSION['tipo_usuario']==3) { ?>
+					<?php if ($_SESSION['tipo_usuario'] == 3) { ?>
 					<ul class='nav nav1 navbar-nav'>
 						<li> <a href='#'> <i class='glyphicon glyphicon-pencil'></i> Panel de Cajero</a></li>
 					</ul>
-					<?php } ?>
+					<?php 
+			} ?>
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a href='logout.php'> <i class='glyphicon glyphicon-off'></i> Cerrar Sesi&oacute;n</a></li>
 					</ul>
 
 					<ul class='nav nav1 navbar-nav navbar-right'>
 						<li> <a> <i class='glyphicon glyphicon-user'></i>
-								<?php echo ''.utf8_decode($row['nombre']); ?></a></li>
+								<?php echo '' . utf8_decode($row['nombre']); ?></a></li>
 					</ul>
 				</div>
 			</div>
@@ -202,16 +245,42 @@ $errors = array();
 									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="Enviar1"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
 								</div>
 							</div>
+
+							<div class="form-group">
+								<label for="monto" class="col-md-3 control-label">Ingrese el Monto</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" name="monto" placeholder="Ingrese el monto" value="<?php if (isset($monto)) echo $monto; ?>" >
+									
+								</div>
+							</div>
+							
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-3">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarDeposito"><i class="icon-hand-right"></i>Deposito Monetario</button> 
+								</div>
+							</div>
+
+							<div class="form-group">                             
+								<div class="col-md-offset-3 col-md-3">
+									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarRetiro"><i class="icon-hand-right"></i>Retiro Monetario</button> 
+								</div>
+							</div>
+
+
+
+
 							<div class="form-group"><?php echo resultBlock($errors); ?></div>
 
 		</div>
-		<div class="form-group tab-pane col-sm-4">
+		<div class="form-group tab-pane col-sm-5">
 							<h3>Informacion de la Cuenta</h3>
 							<div class="panel panel-default">
 								<div class="panel-body">
 									<table class="table table-fixed">
 										<thead>
 											<tr>
+												<th>Id:</th>
 												<th>No cuenta:</th>
 												<th>Nombre Cuenta:</th>
 												<th>DPI:</th>
@@ -221,11 +290,11 @@ $errors = array();
 										</thead>
 										<tbody>
 											 <?php
-																						
-                                        		for ($i = 0; $i < $len; $i++){
-                                                   echo "<tr><td width: 5%>". $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>". $lista['NombreCuenta'] ."</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
-                                             	}
-                                             ?>
+
+											for ($i = 0; $i < $len; $i++) {
+												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+											}
+											?>
 										</tbody>
 									</table>
 								</div>
@@ -233,40 +302,7 @@ $errors = array();
 						</div>
 	</form>
 	  
-	<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
-		<div class="form-group tab-pane col-sm-6">
-		
-		                    <div class="form-group">
-								<label for="monto" class="col-md-3 control-label">Ingrese el Monto</label>
-								<div class="col-md-9">
-									<input type="text" class="form-control" name="monto" placeholder="Ingrese el monto" value="<?php if (isset($cuenta)) echo $cuenta; ?>" required >
-									
-								</div>
-							</div>
-							
-
-							<div class="form-group">                             
-								<div class="col-md-offset-3 col-md-3">
-									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarDeposito"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
-								</div>
-							</div>
-
-							<div class="form-group">                             
-								<div class="col-md-offset-3 col-md-3">
-									<button id="btn-signup" type="submit" class="btn btn-primary btn-sm btn-block" name="EnviarRetiro"><i class="icon-hand-right"></i>Consulta Cuenta</button> 
-								</div>
-							</div>
-
-
-
-
-
-							<div class="form-group"><?php echo resultBlock($errors); ?></div>
-
-		</div>
-
-
-	  </p>
+   </p>
     
 	</div>
     

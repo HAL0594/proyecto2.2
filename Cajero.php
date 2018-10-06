@@ -279,6 +279,8 @@ if (isset($_POST['EnviarRetiro'])) {
 							<div class="form-group"><?php echo resultBlock($errors); ?></div>
 
 		</div>
+		<div class="form-group tab-pane col-sm-1">
+		</div>
 		<div class="form-group tab-pane col-sm-5">
 							<h3>Informacion de la Cuenta</h3>
 							<div class="panel panel-default">
@@ -296,10 +298,21 @@ if (isset($_POST['EnviarRetiro'])) {
 										</thead>
 										<tbody>
 											 <?php
-
+if (isset($_POST['Enviar1'])) {
 											for ($i = 0; $i < $len; $i++) {
 												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
 											}
+										}
+										if (isset($_POST['EnviarDeposito'])) {
+											for ($i = 0; $i < $len; $i++) {
+												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+											}
+										}
+										if (isset($_POST['EnviarRetiro'])) {
+											for ($i = 0; $i < $len; $i++) {
+												echo "<tr><td width: 5%>" . $i . "</td><td>" . $lista['no_cuenta'] . "</td><td>" . $lista['NombreCuenta'] . "</td><td>" . $lista['DPI'] . "</td><td>Q." . $lista['saldo'] . "</td></tr>" . $lista['est'] . "</td></tr>";
+											}
+										}
 											?>
 										</tbody>
 									</table>

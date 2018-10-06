@@ -15,12 +15,14 @@ $errors = array();
     $permitido = 0;
 	$idUsuario = $_SESSION['id_usuario'];
 	
-	$sql = "SELECT id_usuario, nombre, no_cuenta FROM usuarios WHERE id_usuario = '$idUsuario'";
+	$sql = "SELECT id_usuario, nombre, no_cuenta, correo, telefono FROM usuarios WHERE id_usuario = '$idUsuario'";
 	$result = $mysqli->query($sql);
 	$row = $result->fetch_assoc();
 	$minombre = $row['nombre'];
 	$micuenta = $row['no_cuenta'];
 	$miid = $row['id_usuario'];
+	$micorreo = $row['correo'];
+	$mitelefono = $row['telefono'];
 
 	$sqlCuenta = "SELECT saldo, no_cuenta FROM cuentas WHERE no_cuenta = '$micuenta'";
 	$ResCeunta = $mysqli->query($sqlCuenta);
@@ -160,6 +162,8 @@ $len = $TransacList->num_rows;
   width: 100%;
 }
 
+
+
 .table-fixed thead,
 .table-fixed tbody,
 .table-fixed tfoot,
@@ -218,7 +222,7 @@ $len = $TransacList->num_rows;
 			<ul class="nav nav-tabs nav-justified" role="tablist">
 				<li class="active"><a data-toggle="tab" href="#menu1">Estado De Cuenta </a></li>
 				<li><a data-toggle="tab" href="#menu2">Transferencias</a></li>
-				<li><a data-toggle="tab" href="#menu3">Agregar Cuentas de Terceros</a></li>
+				<li><a data-toggle="tab" href="#menu3">Agregar Cuentas de Contactos</a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -237,22 +241,23 @@ $len = $TransacList->num_rows;
 								<tbody>
 									<tr>
 										<th scope="row">Usuario:</th>
-										<td>
-											<?php echo "$minombre" ?>
-										</td>
+										<td><?php echo "$minombre" ?></td>
 									</tr>
-									<tr>
+								 	<tr>
 										<td scope="row">No. de Cuenta:</td>
-										<td>
-											<?php echo "$micuenta" ?>
-										</td>
+										<td><?php echo "$micuenta" ?></td>
 									</tr>
 									<tr>
 										<td scope="row">Saldo:</td>
-										<td>
-											<?php echo "Q.$misaldo" ?>
-										</td>
-
+										<td><?php echo "Q.$misaldo" ?></td>
+									</tr>
+									<tr>
+										<td scope="row">Correo:</td>
+										<td><?php echo "$micorreo" ?></td>
+									</tr>
+									<tr>
+										<td scope="row">Telefono:</td>
+										<td><?php echo "$mitelefono" ?></td>
 									</tr>
 								</tbody>
 							</table>
@@ -310,14 +315,18 @@ $len = $TransacList->num_rows;
 								$S1 = $ResNomC->fetch_assoc();
 								$NombreActual = $S1['NombreCuenta'];
 				             echo " <option value='".$accu."'>".$NombreActual.": ".$accu."</option>"; 
-			                 }
+							 }
+							 echo "</select>";
 		                     }
 		                     else
 		                     {
-			                 echo " <option value='Sin Contactos'>Sin Contactos</option>"; 
-		                     }
+							 echo " <option value='Sin Contactos'>Sin Contactos</option>"; 
+							 echo "</select>";
+							 echo "<br><div class="."col-sm-4"."><p>IMPORTANTE: para agregar un contacto ve a la pestana contactos y agrega el numero de cuenta del contacto, El usuario de dicha cuenta recivira una peticion de parte tulla en su correo para que puedas realizar transacciones a su cuenta</p></div>";
+							 }
+							 
 		                     ?>
-								</select>
+								
 							</div>
 						</div>
 						<div class="form-group tab-pane col-sm-6">
@@ -326,7 +335,7 @@ $len = $TransacList->num_rows;
 								<input type="CantTran" name="CantTran" class="form-control" id="CantTran">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-default " name="depositar">Confirmar</button>
+								<button type="submit" class="btn btn-primary btn-sm btn-default " name="depositar">Confirmar</button>
 							</div>
 						</div>
 					</form>
@@ -335,13 +344,14 @@ $len = $TransacList->num_rows;
 				<div id="menu3" class="tab-pane fade">
 
 					<form class="form-horizontal" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" autocomplete="off">
+					
 						<div class="form-group">
-
+						     <br>
 							<label for="no_cuenta">No. cuenta de Contacto</label>
 							<input type="no_cuenta" name="no_cuenta" class="form-control" id="no_cuenta">
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-default" name="agregar_contacto">Confirmar</button>
+							<button type="submit" class="btn btn-primary btn-sm btn-default" name="agregar_contacto">Confirmar</button>
 						</div>
 					</form>
 

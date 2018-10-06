@@ -53,7 +53,7 @@ $CajeTipo = 3;
 $SQLTransacList="SELECT id_usuario, usuario, nombre, correo, activacion, telefono, no_cuenta  FROM usuarios WHERE id_tipo = '$CajeTipo'";
 $TransacList = $mysqli->query($SQLTransacList);
 $len = $TransacList->num_rows;
-$lista = $TransacList->fetch_assoc();               
+             
 
 ?>
 
@@ -222,16 +222,11 @@ $lista = $TransacList->fetch_assoc();
 										</thead>
 										<tbody>
 											 <?php
-                                                    $esta = $lista['activacion'];
+                                                    
                                               for ($i = 0; $i < $len; $i++){
-												$esta = $lista['activacion'];
-                                                 if($esta > 0){
-                                                $estaD = "Habilitado";
-												 }else{
-												$estaD = "Deshabilitado";
-												 }
+											
 												 $lista = $TransacList->fetch_assoc();   
-                                                   echo "<tr><td width: 5%>". $lista['id_usuario']  . "</td><td>" . $lista['usuario'] . "</td><td>". $lista['nombre']  . "</td><td>" . $lista['correo'] . "</td><td>" . $estaD . "</td><td>" . $lista['telefono'] . "</td><td>" . $lista['no_cuenta'] . "</td></tr>";
+                                                   echo "<tr><td width: 5%>". $lista['id_usuario']  . "</td><td>" . $lista['usuario'] . "</td><td>". $lista['nombre']  . "</td><td>" . $lista['correo'] . "</td><td>" . $lista['activacion'] . "</td><td>" . $lista['telefono'] . "</td><td>" . $lista['no_cuenta'] . "</td></tr>";
                                              }
                                              ?>
 										</tbody>

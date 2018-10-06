@@ -89,12 +89,19 @@ if (isset($_POST['EnviarDeposito'])) {
 
 //******************************** Retiro **********************************************************
 
-if (isset($_POST['EnviaRetiro'])) {
+if (isset($_POST['EnviarRetiro'])) {
 
-	$cuenta = $_POST['monto'];
+	$CantTran = $_POST['monto']*-1;
+	$CuentaRetiro = $_POST['cuenta'];
 
+	
+	$DescTrans = "Retiro";
+	$RTransac = RealizaDepRet($DescTrans, $CuentaRetiro, $CantTran);
+	if ($RTransac > 0) {
+		echo "la transaccion se realiza correctamente";
+	}
 
-	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$cuenta'";
+	$SQLCuenta = "SELECT `no_cuenta`,`NombreCuenta`,`DPI`,`saldo`, case when `estado`= 1 then 'Activo' else 'Inactiva' end as est  FROM cuentas WHERE no_cuenta = '$CuentaRetiro'";
 	$CuentaLista = $mysqli->query($SQLCuenta);
 	$len = $CuentaLista->num_rows;
 
@@ -102,7 +109,6 @@ if (isset($_POST['EnviaRetiro'])) {
 		$lista = $CuentaLista->fetch_assoc();
 	} else
 		$errors[] = "la cuenta no es valida";
-
 
 }
 

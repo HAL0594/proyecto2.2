@@ -230,7 +230,7 @@ $lista = $TransacList->fetch_assoc();
 												 }else{
 												$estaD = "Deshabilitado";
 												 }
-
+												 $lista = $TransacList->fetch_assoc();   
                                                    echo "<tr><td width: 5%>". $lista['id_usuario']  . "</td><td>" . $lista['usuario'] . "</td><td>". $lista['nombre']  . "</td><td>" . $lista['correo'] . "</td><td>" . $estaD . "</td><td>" . $lista['telefono'] . "</td><td>" . $lista['no_cuenta'] . "</td></tr>";
                                              }
                                              ?>
